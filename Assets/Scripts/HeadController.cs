@@ -70,7 +70,7 @@ public class HeadController : MonoBehaviour {
 	}
 
 	void UpdateBodyLocation() {
-		body.AddAfter (body.First, (GameObject)Instantiate (snakeBody, rigidbody.transform.position - movement, Quaternion.identity));
+		body.AddBefore (body.First, (GameObject)Instantiate (snakeBody, rigidbody.transform.position - movement, Quaternion.identity));
 		Destroy (body.Last.Value);
 		body.RemoveLast ();
 	}
