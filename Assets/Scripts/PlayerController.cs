@@ -80,8 +80,8 @@ public class PlayerController : MonoBehaviour
 			nextMove = Time.time + (1 / speed);
 
 			Move ();
-			if (grow)
-				Grow ();
+			//if (grow)
+			//	Grow ();
 			
 			grow = false;
 		}
@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour
 		if (hit.transform != null)
 			Destroy (gameObject);
 
-		Rotate ();
+		//Rotate ();
 		rigidbody.transform.position = nextPosition;
 
 		// Przemieszczenie ostatniego elementu weza na pcozatek
@@ -120,7 +120,6 @@ public class PlayerController : MonoBehaviour
 
 	void Rotate ()
 	{
-		/*
 		if (movement.x != 0) 
 		{
 			if (movement.x == 1)
@@ -135,12 +134,10 @@ public class PlayerController : MonoBehaviour
 			else
 				rigidbody.MoveRotation (270);
 		}
-		*/
 	}
 
 	void Grow ()
 	{
-		
 		if (first != null) 
 		{
 			first.previous = new Snake (null, null, Instantiate(bodyPrefab, rigidbody.transform.position - movement, Quaternion.identity));
@@ -150,6 +147,5 @@ public class PlayerController : MonoBehaviour
 		{
 			last = first = new Snake (null, null, Instantiate(bodyPrefab, rigidbody.transform.position - movement, Quaternion.identity));
 		}
-
 	}
 }
