@@ -80,8 +80,8 @@ public class PlayerController : MonoBehaviour
 			nextMove = Time.time + (1 / speed);
 
 			Move ();
-			//if (grow)
-			//	Grow ();
+			if (grow)
+				Grow ();
 			
 			grow = false;
 		}
@@ -97,12 +97,13 @@ public class PlayerController : MonoBehaviour
 		GetComponent<BoxCollider2D>().enabled = true;
 
 		if (hit.transform != null)
-			Destroy (gameObject);
+			;//Destroy (gameObject);
 
 		//Rotate ();
 		rigidbody.transform.position = nextPosition;
 
 		// Przemieszczenie ostatniego elementu weza na pcozatek
+
 		if (first != null && !grow) 
 		{
 			last.MoveBodyPart (rigidbody.transform.position - movement);
