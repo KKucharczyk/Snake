@@ -120,6 +120,7 @@ public class PlayerController : MonoBehaviour
 
 	void Rotate ()
 	{
+		/*
 		if (movement.x != 0) 
 		{
 			if (movement.x == 1)
@@ -134,10 +135,12 @@ public class PlayerController : MonoBehaviour
 			else
 				rigidbody.MoveRotation (270);
 		}
+		*/
 	}
 
 	void Grow ()
 	{
+		
 		if (first != null) 
 		{
 			first.previous = new Snake (null, null, Instantiate(bodyPrefab, rigidbody.transform.position - movement, Quaternion.identity));
@@ -147,5 +150,6 @@ public class PlayerController : MonoBehaviour
 		{
 			last = first = new Snake (null, null, Instantiate(bodyPrefab, rigidbody.transform.position - movement, Quaternion.identity));
 		}
+
 	}
 }
