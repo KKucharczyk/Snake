@@ -12,7 +12,6 @@ public class HeadController : MonoBehaviour {
 	public GameObject snakeBody;
 	private LinkedList<GameObject> body;
 	private Vector2 lastHeadPosition;
-	int bodySize = 0;
 
 	void Start () 
 	{
@@ -24,9 +23,9 @@ public class HeadController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-
+		
 		lastHeadPosition = rigidbody.transform.position;
-
+		//Debug.Log (body.Count);
 		if (Input.anyKeyDown) 
 		{
 			if (Input.GetKey(KeyCode.UpArrow) && movement.y != -1)
@@ -45,11 +44,14 @@ public class HeadController : MonoBehaviour {
 			nextMove = Time.time + (1 / speed);
 
 			Move ();
-			if(bodySize > 0)
-				UpdateBodyLocation ();
 
 			if (grow)
 				Grow ();
+
+			if (body.Count > 0) {
+				UpdateBodyLocation ();
+			}
+
 
 			grow = false;
 		}
@@ -65,7 +67,6 @@ public class HeadController : MonoBehaviour {
 	void Grow ()
 	{
 		body.AddLast((GameObject) Instantiate(snakeBody, rigidbody.transform.position - movement, Quaternion.identity));
-		bodySize++;
 	}
 
 	void UpdateBodyLocation() {
