@@ -11,9 +11,10 @@ public class HeadController : MonoBehaviour
 	private bool grow;
 	public GameObject snakeBody;
 	private LinkedList<GameObject> body;
-	private Vector2 lastHeadPosition;
+	private Vector2 lastHeadPosition = new Vector2();
 
 	public Sprite[] head;
+	private SpriteRenderer sr = new SpriteRenderer();
 
 	void Start ()
 	{
@@ -71,13 +72,21 @@ public class HeadController : MonoBehaviour
 		RaycastHit2D hit = Physics2D.Linecast (rigidbody.transform.position, nextPosition, LayerMask.GetMask ("Default"));
 		if (hit.transform != null)
 			Debug.Log("Uderzyłem");
+		
 
 		rigidbody.transform.position = nextPosition;
 	}
 
 	void Grow ()
 	{
+		Vector2 nextPosition = rigidbody.transform.position + movement;
 		body.AddLast ((GameObject)Instantiate (snakeBody, rigidbody.transform.position - movement, Quaternion.identity));
+		if (lastHeadPosition.x != nextPosition.x) {
+			Debug.Log ("Cycki");
+			sr = body.Last.Value.GetComponent<SpriteRenderer> ();
+			sr.sprite = head [0];
+			//body.Last.Value.GetComponent<SpriteRenderer>().sprite = head[4];
+		}
 	}
 
 	void UpdateBodyLocation ()
