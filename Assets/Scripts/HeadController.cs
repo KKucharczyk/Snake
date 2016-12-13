@@ -62,11 +62,13 @@ public class HeadController : MonoBehaviour {
 	{
 		Vector2 nextPosition = rigidbody.transform.position + movement;
 
+		/*
 		// Sprawdź czy po wykonaniu ruchu natrafisz na ciało kolizyjne
 		// jezeli tak, zniszcz siebie (głowę)
 		RaycastHit2D hit = Physics2D.Linecast (rigidbody.transform.position, nextPosition, LayerMask.GetMask ("Default"));
 		if (hit.transform != null)
 			Debug.Log("Uderzyłem");
+		*/
 
 		rigidbody.transform.position = nextPosition;
 	}
@@ -80,5 +82,15 @@ public class HeadController : MonoBehaviour {
 		body.AddBefore (body.First, (GameObject)Instantiate (snakeBody, rigidbody.transform.position - movement, Quaternion.identity));
 		Destroy (body.Last.Value);
 		body.RemoveLast ();
+	}
+
+	void OnTriggerEnter2D (Collider2D other)
+	{
+		//grow = true;
+
+		if (other.tag == "Snake" || other.tag == "Wall")
+			Destroy(gameObject);
+		else if (other.tag == "Food")
+			grow = true;
 	}
 }
