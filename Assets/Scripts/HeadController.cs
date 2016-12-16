@@ -118,7 +118,7 @@ public class HeadController : MonoBehaviour
 			}
 
 			if (this.body.First.Next.Next.Value.transform.position.x < this.body.First.Value.transform.position.x && nextPosition.x == lastHeadPosition.x && nextPosition.y < lastHeadPosition.y) {
-				Debug.Log ("Z prawej w dół.");
+				Debug.Log ("Z prawej w dół.");				
 				snakeBody.GetComponent<SpriteRenderer> ().sprite = bodyRotationSprites [0];
 			}
 
