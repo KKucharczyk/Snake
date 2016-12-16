@@ -5,7 +5,7 @@ using UnityEngine;
 public class HeadController : MonoBehaviour
 {
 	public float speed;
-	private Rigidbody2D rigidbody;
+	private Rigidbody2D rigidbody = new Rigidbody2D ();
 	private float nextMove;
 	private Vector3 movement;
 	private bool grow;
@@ -13,8 +13,10 @@ public class HeadController : MonoBehaviour
 	private LinkedList<GameObject> body;
 	private Vector2 lastHeadPosition = new Vector2();
 
-	public Sprite[] head;
-	private SpriteRenderer sr = new SpriteRenderer();
+	public Sprite[] headSprites;
+	public Sprite[] bodySprites;
+
+	private SpriteRenderer spriteRenderer;
 
 	void Start ()
 	{
@@ -22,7 +24,6 @@ public class HeadController : MonoBehaviour
 		movement = new Vector3 (0.0f, 0.0f);
 		body = new LinkedList<GameObject> ();
 		lastHeadPosition = new Vector2 (0.0f, 0.0f);
-		//head = Resources.Load<Sprite> ("Snake_v2_10");
 	}
 
 	// Update is called once per frame
@@ -33,16 +34,16 @@ public class HeadController : MonoBehaviour
 		if (Input.anyKeyDown) {
 			if (Input.GetKey (KeyCode.UpArrow) && movement.y != -1) {
 				movement = new Vector2 (0.0f, 1);
-				GetComponent<SpriteRenderer> ().sprite = head [0];
+				GetComponent<SpriteRenderer> ().sprite = headSprites [0];
 			} else if (Input.GetKey (KeyCode.DownArrow) && movement.y != 1) {
 				movement = new Vector2 (0.0f, -1);
-				GetComponent<SpriteRenderer> ().sprite = head [1];
+				GetComponent<SpriteRenderer> ().sprite = headSprites [1];
 			}  else if (Input.GetKey (KeyCode.LeftArrow) && movement.x != 1) {
 				movement = new Vector2 (-1, 0.0f);
-				GetComponent<SpriteRenderer> ().sprite = head [3];
+				GetComponent<SpriteRenderer> ().sprite = headSprites [3];
 			} else if (Input.GetKey (KeyCode.RightArrow) && movement.x != -1) {
 				movement = new Vector2 (1, 0.0f);
-				GetComponent<SpriteRenderer> ().sprite = head [2];
+				GetComponent<SpriteRenderer> ().sprite = headSprites [2];
 			} else if (Input.GetKey (KeyCode.Space))
 				grow = true;
 		}
@@ -79,18 +80,24 @@ public class HeadController : MonoBehaviour
 
 	void Grow ()
 	{
-		Vector2 nextPosition = rigidbody.transform.position + movement;
-		body.AddLast ((GameObject)Instantiate (snakeBody, rigidbody.transform.position - movement, Quaternion.identity));
-		if (lastHeadPosition.x != nextPosition.x) {
-			Debug.Log ("Cycki");
-			sr = body.Last.Value.GetComponent<SpriteRenderer> ();
-			sr.sprite = head [0];
-			//body.Last.Value.GetComponent<SpriteRenderer>().sprite = head[4];
-		}
+			Vector2 nextPosition = rigidbody.transform.position + movement;
+			if (body.Count > 0 && lastHeadPosition.x != nextPosition.x) {
+				snakeBody.GetComponent<SpriteRenderer> ().sprite = bodySprites[0];
+			} else {
+			snakeBody.GetComponent<SpriteRenderer> ().sprite = bodySprites[1];
+			}
+			this.body.AddLast ((GameObject)Instantiate (snakeBody, rigidbody.transform.position - movement, Quaternion.identity));
+
 	}
 
 	void UpdateBodyLocation ()
 	{
+		Vector2 nextPosition = rigidbody.transform.position + movement;
+		if (body.Count > 0 && lastHeadPosition.x != nextPosition.x) {
+			snakeBody.GetComponent<SpriteRenderer> ().sprite = bodySprites[0];
+		} else {
+			snakeBody.GetComponent<SpriteRenderer> ().sprite = bodySprites[1];
+		}
 		body.AddBefore (body.First, (GameObject)Instantiate (snakeBody, rigidbody.transform.position - movement, Quaternion.identity));
 		Destroy (body.Last.Value);
 		body.RemoveLast ();

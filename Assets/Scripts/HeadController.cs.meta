@@ -1,10 +1,12 @@
 fileFormatVersion: 2
 guid: 4819c89c1b08c764ebe67247eb46010c
-timeCreated: 1481474865
+timeCreated: 1481858470
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - snakeBody: {fileID: 1573673318253776, guid: 37388bfee43973f4fa83ddbe2f205607,
+      type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
