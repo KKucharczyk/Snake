@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class HeadController : MonoBehaviour
 {
 	public float speed;
@@ -42,6 +43,7 @@ public class HeadController : MonoBehaviour
 	{
 		
 		lastHeadPosition = rigidbody.transform.position;
+
 		if (Input.anyKeyDown) {
 			changedDirection = true;
 			if (Input.GetKey (KeyCode.UpArrow) && movement.y != -1) {
@@ -61,10 +63,12 @@ public class HeadController : MonoBehaviour
 				GetComponent<SpriteRenderer> ().sprite = headSprites [2];
 				headDirection = Direction.RIGHT;
 			} else if (Input.GetKey (KeyCode.Space))
+
 				grow = true;
 		}
 
-		if (Time.time > nextMove) {
+		if (Time.time > nextMove) 
+		{
 			nextMove = Time.time + (1 / speed);
 
 			Move ();
@@ -72,7 +76,8 @@ public class HeadController : MonoBehaviour
 			if (grow)
 				Grow ();
 
-			if (body.Count > 0) {
+			if (body.Count > 0) 
+			{
 				UpdateBodyLocation ();
 			}
 			grow = false;
@@ -82,6 +87,7 @@ public class HeadController : MonoBehaviour
 	void Move ()
 	{
 		Vector2 nextPosition = rigidbody.transform.position + movement;
+
 		RaycastHit2D hit = Physics2D.Linecast (rigidbody.transform.position, nextPosition, LayerMask.GetMask ("Default"));
 		if (hit.transform != null)
 			Debug.Log ("Uderzyłem");
@@ -100,6 +106,7 @@ public class HeadController : MonoBehaviour
 		this.body.AddLast ((GameObject)Instantiate (snakeBody, rigidbody.transform.position - movement, Quaternion.identity));
 
 	}
+
 
 	void UpdateBodyLocation ()
 	{
@@ -156,8 +163,17 @@ public class HeadController : MonoBehaviour
 				snakeBody.GetComponent<SpriteRenderer> ().sprite = bodySprites [1];
 			} 
 		}
+
 		body.AddBefore (body.First, (GameObject)Instantiate (snakeBody, rigidbody.transform.position - movement, Quaternion.identity));
 		Destroy (body.Last.Value);
 		body.RemoveLast ();
+	}
+
+	void OnTriggerEnter2D (Collider2D other)
+	{
+		if (other.tag == "Snake" || other.tag == "Wall")
+			Destroy(gameObject);
+		else if (other.tag == "Food")
+			grow = true;
 	}
 }
