@@ -2,7 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HeadController : MonoBehaviour {
+public class HeadController : MonoBehaviour 
+{
+	private enum DIRECTION
+	{
+		NONE,
+		RIGHT,
+		UP,
+		LEFT,
+		DOWN
+	}
 
 	public float speed;   // Tempo gry
 	private Rigidbody2D rigidbody;   // Uchwyt do Rigidbody obiektu
@@ -12,6 +21,7 @@ public class HeadController : MonoBehaviour {
 	public GameObject snakeBody;
 	private LinkedList<GameObject> body;
 	private Vector2 lastHeadPosition;
+	private DIRECTION direction;
 
 	void Start () 
 	{
@@ -19,6 +29,7 @@ public class HeadController : MonoBehaviour {
 		movement = new Vector3 (0.0f, 0.0f);
 		body = new LinkedList<GameObject> ();
 		lastHeadPosition = new Vector2 (0.0f, 0.0f);
+		direction = DIRECTION.NONE;
 	}
 
 	// Update is called once per frame
@@ -29,18 +40,19 @@ public class HeadController : MonoBehaviour {
 		if (Input.anyKeyDown) 
 		{
 			if (Input.GetKey(KeyCode.UpArrow) && movement.y != -1)
-				movement = new Vector2 (0.0f, 1);
+				direction = DIRECTION.UP;
 			else if (Input.GetKey (KeyCode.RightArrow) && movement.x != -1)
-				movement = new Vector2 (1, 0.0f);
+				direction = DIRECTION.RIGHT;
 			else if (Input.GetKey (KeyCode.DownArrow) && movement.y != 1)
-				movement = new Vector2 (0.0f, -1);
+				direction = DIRECTION.DOWN;
 			else if (Input.GetKey (KeyCode.LeftArrow) && movement.x != 1)
-				movement = new Vector2 (-1, 0.0f);
+				direction = DIRECTION.LEFT;
 			else if (Input.GetKey (KeyCode.Space))
 				grow = true;
 		}
 
-		if (Time.time > nextMove) {
+		if (Time.time > nextMove) 
+		{
 			nextMove = Time.time + (1 / speed);
 
 			Move ();
@@ -48,7 +60,8 @@ public class HeadController : MonoBehaviour {
 			if (grow)
 				Grow ();
 
-			if (body.Count > 0) {
+			if (body.Count > 0) 
+			{
 				UpdateBodyLocation ();
 			}
 
@@ -60,6 +73,13 @@ public class HeadController : MonoBehaviour {
 
 	void Move ()
 	{
+		switch (direction) 
+		{
+			case DIRECTION.RIGHT: movement = new Vector3 (1, 0); break;
+			case DIRECTION.UP: movement = new Vector3 (0, 1); break;
+			case DIRECTION.LEFT: movement = new Vector3 (-1, 0); break;
+			case DIRECTION.DOWN: movement = new Vector3 (0, -1); break;
+		}
 		Vector2 nextPosition = rigidbody.transform.position + movement;
 
 		/*
@@ -78,7 +98,8 @@ public class HeadController : MonoBehaviour {
 		body.AddLast((GameObject) Instantiate(snakeBody, rigidbody.transform.position - movement, Quaternion.identity));
 	}
 
-	void UpdateBodyLocation() {
+	void UpdateBodyLocation() 
+	{
 		body.AddBefore (body.First, (GameObject)Instantiate (snakeBody, rigidbody.transform.position - movement, Quaternion.identity));
 		Destroy (body.Last.Value);
 		body.RemoveLast ();
@@ -86,8 +107,6 @@ public class HeadController : MonoBehaviour {
 
 	void OnTriggerEnter2D (Collider2D other)
 	{
-		//grow = true;
-
 		if (other.tag == "Snake" || other.tag == "Wall")
 			Destroy(gameObject);
 		else if (other.tag == "Food")
