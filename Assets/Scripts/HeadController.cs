@@ -89,8 +89,6 @@ public class HeadController : MonoBehaviour
 		Vector2 nextPosition = rigidbody.transform.position + movement;
 
 		RaycastHit2D hit = Physics2D.Linecast (rigidbody.transform.position, nextPosition, LayerMask.GetMask ("Default"));
-		if (hit.transform != null)
-			Debug.Log ("Uderzyłem");
 
 		rigidbody.transform.position = nextPosition;
 	}
@@ -171,9 +169,13 @@ public class HeadController : MonoBehaviour
 
 	void OnTriggerEnter2D (Collider2D other)
 	{
+		Debug.Log ("Jestem tuuuuu");
 		if (other.tag == "Snake" || other.tag == "Wall")
-			Destroy(gameObject);
-		else if (other.tag == "Food")
+			Destroy (gameObject);
+		else if (other.tag == "Food") 
+		{
 			grow = true;
+			Debug.Log ("Jestem tu");
+		}
 	}
 }
