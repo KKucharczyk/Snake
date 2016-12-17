@@ -113,43 +113,43 @@ public class HeadController : MonoBehaviour
 			changedDirection = false;
 			Debug.Log ("Ostry skręt.");
 			if (this.body.First.Next.Next.Value.transform.position.x < this.body.First.Value.transform.position.x && nextPosition.x == lastHeadPosition.x && nextPosition.y > lastHeadPosition.y) {
-				Debug.Log ("Z prawej w górę.");
+				//Debug.Log ("Z prawej w górę.");
 				snakeBody.GetComponent<SpriteRenderer> ().sprite = bodyRotationSprites [1];
 			}
 
 			if (this.body.First.Next.Next.Value.transform.position.x > this.body.First.Value.transform.position.x && nextPosition.x == lastHeadPosition.x && nextPosition.y > lastHeadPosition.y) {
-				Debug.Log ("Z lewej w górę.");
+				//Debug.Log ("Z lewej w górę.");
 				snakeBody.GetComponent<SpriteRenderer> ().sprite = bodyRotationSprites [2];
 			}
 
 			if (this.body.First.Next.Next.Value.transform.position.x < this.body.First.Value.transform.position.x && nextPosition.x == lastHeadPosition.x && nextPosition.y < lastHeadPosition.y) {
-				Debug.Log ("Z prawej w dół.");				
+				//Debug.Log ("Z prawej w dół.");				
 				snakeBody.GetComponent<SpriteRenderer> ().sprite = bodyRotationSprites [0];
 			}
 
 			if (this.body.First.Next.Next.Value.transform.position.x > this.body.First.Value.transform.position.x && nextPosition.x == lastHeadPosition.x && nextPosition.y < lastHeadPosition.y) {
-				Debug.Log ("Z lewej w dół.");
+				//Debug.Log ("Z lewej w dół.");
 				snakeBody.GetComponent<SpriteRenderer> ().sprite = bodyRotationSprites [3];
 			}
 
 			if (this.body.First.Next.Next.Value.transform.position.y < this.body.First.Value.transform.position.y && nextPosition.y == lastHeadPosition.y && nextPosition.x > lastHeadPosition.x) {
-				Debug.Log ("Z góry w prawo.");
+				//Debug.Log ("Z góry w prawo.");
 				snakeBody.GetComponent<SpriteRenderer> ().sprite = bodyRotationSprites [3];
 			}
 
 			if (this.body.First.Next.Next.Value.transform.position.y < this.body.First.Value.transform.position.y && nextPosition.y == lastHeadPosition.y && nextPosition.x < lastHeadPosition.x) {
-				Debug.Log ("Z góry w lewo.");
+				//Debug.Log ("Z góry w lewo.");
 				snakeBody.GetComponent<SpriteRenderer> ().sprite = bodyRotationSprites [0];
 			}
 
 
 			if (this.body.First.Next.Next.Value.transform.position.y > this.body.First.Value.transform.position.y && nextPosition.y == lastHeadPosition.y && nextPosition.x > lastHeadPosition.x) {
-				Debug.Log ("Z dołu w prawo.");
+				//Debug.Log ("Z dołu w prawo.");
 				snakeBody.GetComponent<SpriteRenderer> ().sprite = bodyRotationSprites [2];
 			}
 
 			if (this.body.First.Next.Next.Value.transform.position.y > this.body.First.Value.transform.position.y && nextPosition.y == lastHeadPosition.y && nextPosition.x < lastHeadPosition.x) {
-				Debug.Log ("Z dołu w lewo.");
+				//Debug.Log ("Z dołu w lewo.");
 				snakeBody.GetComponent<SpriteRenderer> ().sprite = bodyRotationSprites [1];
 			}
 
@@ -169,13 +169,11 @@ public class HeadController : MonoBehaviour
 
 	void OnTriggerEnter2D (Collider2D other)
 	{
-		Debug.Log ("Jestem tuuuuu");
 		if (other.tag == "Snake" || other.tag == "Wall")
 			Destroy (gameObject);
 		else if (other.tag == "Food") 
 		{
 			grow = true;
-			Debug.Log ("Jestem tu");
 		}
 	}
 }
