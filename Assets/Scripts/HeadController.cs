@@ -174,6 +174,7 @@ public class HeadController : MonoBehaviour
 		else if (other.tag == "Food") 
 		{
 			grow = true;
+			Destroy (other.gameObject);
 		}
 	}
 }
