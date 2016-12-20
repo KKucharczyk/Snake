@@ -7,28 +7,28 @@ public class HeadController : MonoBehaviour
 {
 	public float speed;
 	private Rigidbody2D rigidbody;
-	private float nextMove;
-	private Vector3 movement;
+
 	private bool grow;
 	public GameObject snakeBody;
 	private LinkedList<GameObject> body;
-	private Vector2 lastHeadPosition = new Vector2 ();
+
+	private float nextMove;
+
+	private Vector3 movement;
+	private Vector2 lastHeadPosition;
+	private Vector2 nextPosition;
+
+	bool changedDirection = false;
 
 	public Sprite[] headSprites;
 	public Sprite[] bodySprites;
 	public Sprite[] bodyRotationSprites;
 
 	private SpriteRenderer spriteRenderer;
-	bool changedDirection = false;
 
-	enum Direction {
-		UP,
-		DOWN,
-		LEFT,
-		RIGHT
-	};
-
-	private Direction headDirection = Direction.RIGHT;
+	private string snakeTag = "Snake";
+	private string wallTag = "Wall";
+	private string foodTag = "Food";
 
 	void Start ()
 	{
@@ -41,38 +41,17 @@ public class HeadController : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		
-		lastHeadPosition = rigidbody.transform.position;
-
+		lastHeadPosition = this.rigidbody.transform.position;
 		if (Input.anyKeyDown) {
-			changedDirection = true;
-			if (Input.GetKey (KeyCode.UpArrow) && movement.y != -1) {
-				movement = new Vector2 (0.0f, 1);
-				GetComponent<SpriteRenderer> ().sprite = headSprites [0];
-				headDirection = Direction.UP;
-			} else if (Input.GetKey (KeyCode.DownArrow) && movement.y != 1) {
-				movement = new Vector2 (0.0f, -1);
-				GetComponent<SpriteRenderer> ().sprite = headSprites [1];
-				headDirection = Direction.DOWN;
-			} else if (Input.GetKey (KeyCode.LeftArrow) && movement.x != 1) {
-				movement = new Vector2 (-1, 0.0f);
-				GetComponent<SpriteRenderer> ().sprite = headSprites [3];
-				headDirection = Direction.LEFT;
-			} else if (Input.GetKey (KeyCode.RightArrow) && movement.x != -1) {
-				movement = new Vector2 (1, 0.0f);
-				GetComponent<SpriteRenderer> ().sprite = headSprites [2];
-				headDirection = Direction.RIGHT;
-			} else if (Input.GetKey (KeyCode.Space))
-
-				grow = true;
+			analyzeKeyPressed ();
 		}
+
+		nextPosition = rigidbody.transform.position + movement;
 
 		if (Time.time > nextMove) 
 		{
 			nextMove = Time.time + (1 / speed);
-
-			Move ();
-
+			MoveHead ();
 			if (grow)
 				Grow ();
 
@@ -84,18 +63,33 @@ public class HeadController : MonoBehaviour
 		}
 	}
 
-	void Move ()
+	void analyzeKeyPressed() {
+			changedDirection = true;
+		if (Input.GetKey (KeyCode.UpArrow)) {
+			changeHeadDirection (new Vector2 (0.0f, 1), headSprites [0]);
+		} else if (Input.GetKey (KeyCode.DownArrow)) {
+			changeHeadDirection (new Vector2 (0.0f, -1), headSprites [1]);
+		} else if (Input.GetKey (KeyCode.LeftArrow)) {
+			changeHeadDirection (new Vector2 (-1, 0.0f), headSprites [3]);
+		} else if (Input.GetKey (KeyCode.RightArrow)) {
+			changeHeadDirection (new Vector2 (1, 0.0f), headSprites [2]);
+		} else if (Input.GetKey (KeyCode.Space)) {
+			grow = true;
+		}
+	}
+
+	void changeHeadDirection(Vector2 coordinates, Sprite sprite) {
+		movement = coordinates;
+		GetComponent<SpriteRenderer> ().sprite = sprite;
+	}
+
+	void MoveHead ()
 	{
-		Vector2 nextPosition = rigidbody.transform.position + movement;
-
-		RaycastHit2D hit = Physics2D.Linecast (rigidbody.transform.position, nextPosition, LayerMask.GetMask ("Default"));
-
 		rigidbody.transform.position = nextPosition;
 	}
 
 	void Grow ()
 	{
-		Vector2 nextPosition = rigidbody.transform.position + movement;
 		if (body.Count > 0 && lastHeadPosition.x != nextPosition.x) {
 			snakeBody.GetComponent<SpriteRenderer> ().sprite = bodySprites [0];
 		} else {
@@ -105,55 +99,36 @@ public class HeadController : MonoBehaviour
 
 	}
 
-
 	void UpdateBodyLocation ()
 	{
-		Vector2 nextPosition = rigidbody.transform.position + movement;
-		if (body.Count > 2 && changedDirection == true) {
+		if (body.Count > 1 && changedDirection == true) {
 			changedDirection = false;
-			Debug.Log ("Ostry skręt.");
-			if (this.body.First.Next.Next.Value.transform.position.x < this.body.First.Value.transform.position.x && nextPosition.x == lastHeadPosition.x && nextPosition.y > lastHeadPosition.y) {
-				//Debug.Log ("Z prawej w górę.");
-				snakeBody.GetComponent<SpriteRenderer> ().sprite = bodyRotationSprites [1];
-			}
+			float x_przedPierwszy = this.body.First.Next.Value.transform.position.x;
+			float x_pierwszy = this.body.First.Value.transform.position.x;
 
-			if (this.body.First.Next.Next.Value.transform.position.x > this.body.First.Value.transform.position.x && nextPosition.x == lastHeadPosition.x && nextPosition.y > lastHeadPosition.y) {
-				//Debug.Log ("Z lewej w górę.");
-				snakeBody.GetComponent<SpriteRenderer> ().sprite = bodyRotationSprites [2];
-			}
+			float y_przedPierwszy = this.body.First.Next.Value.transform.position.y;
+			float y_pierwszy = this.body.First.Value.transform.position.y;
 
-			if (this.body.First.Next.Next.Value.transform.position.x < this.body.First.Value.transform.position.x && nextPosition.x == lastHeadPosition.x && nextPosition.y < lastHeadPosition.y) {
-				//Debug.Log ("Z prawej w dół.");				
+			if((x_przedPierwszy < x_pierwszy && nextPosition.x == lastHeadPosition.x && nextPosition.y < lastHeadPosition.y) || (y_przedPierwszy < y_pierwszy && nextPosition.y == lastHeadPosition.y && nextPosition.x < lastHeadPosition.x))
+			{		
 				snakeBody.GetComponent<SpriteRenderer> ().sprite = bodyRotationSprites [0];
 			}
 
-			if (this.body.First.Next.Next.Value.transform.position.x > this.body.First.Value.transform.position.x && nextPosition.x == lastHeadPosition.x && nextPosition.y < lastHeadPosition.y) {
-				//Debug.Log ("Z lewej w dół.");
-				snakeBody.GetComponent<SpriteRenderer> ().sprite = bodyRotationSprites [3];
-			}
-
-			if (this.body.First.Next.Next.Value.transform.position.y < this.body.First.Value.transform.position.y && nextPosition.y == lastHeadPosition.y && nextPosition.x > lastHeadPosition.x) {
-				//Debug.Log ("Z góry w prawo.");
-				snakeBody.GetComponent<SpriteRenderer> ().sprite = bodyRotationSprites [3];
-			}
-
-			if (this.body.First.Next.Next.Value.transform.position.y < this.body.First.Value.transform.position.y && nextPosition.y == lastHeadPosition.y && nextPosition.x < lastHeadPosition.x) {
-				//Debug.Log ("Z góry w lewo.");
-				snakeBody.GetComponent<SpriteRenderer> ().sprite = bodyRotationSprites [0];
-			}
-
-
-			if (this.body.First.Next.Next.Value.transform.position.y > this.body.First.Value.transform.position.y && nextPosition.y == lastHeadPosition.y && nextPosition.x > lastHeadPosition.x) {
-				//Debug.Log ("Z dołu w prawo.");
-				snakeBody.GetComponent<SpriteRenderer> ().sprite = bodyRotationSprites [2];
-			}
-
-			if (this.body.First.Next.Next.Value.transform.position.y > this.body.First.Value.transform.position.y && nextPosition.y == lastHeadPosition.y && nextPosition.x < lastHeadPosition.x) {
-				//Debug.Log ("Z dołu w lewo.");
+			if((x_przedPierwszy < x_pierwszy && nextPosition.x == lastHeadPosition.x && nextPosition.y > lastHeadPosition.y) || (y_przedPierwszy > y_pierwszy && nextPosition.y == lastHeadPosition.y && nextPosition.x < lastHeadPosition.x))
+			{
 				snakeBody.GetComponent<SpriteRenderer> ().sprite = bodyRotationSprites [1];
 			}
 
+			if((x_przedPierwszy > x_pierwszy && nextPosition.x == lastHeadPosition.x && nextPosition.y > lastHeadPosition.y) || (y_przedPierwszy > y_pierwszy && nextPosition.y == lastHeadPosition.y && nextPosition.x > lastHeadPosition.x))
+			{
+				snakeBody.GetComponent<SpriteRenderer> ().sprite = bodyRotationSprites [2];
+			}
 
+			if((x_przedPierwszy > x_pierwszy && nextPosition.x == lastHeadPosition.x && nextPosition.y < lastHeadPosition.y) || (y_przedPierwszy < y_pierwszy && nextPosition.y == lastHeadPosition.y && nextPosition.x > lastHeadPosition.x))
+			{
+				snakeBody.GetComponent<SpriteRenderer> ().sprite = bodyRotationSprites [3];
+			}
+				
 		} else {
 			if (body.Count > 0 && lastHeadPosition.x != nextPosition.x) {
 				snakeBody.GetComponent<SpriteRenderer> ().sprite = bodySprites [0];
@@ -169,9 +144,9 @@ public class HeadController : MonoBehaviour
 
 	void OnTriggerEnter2D (Collider2D other)
 	{
-		if (other.tag == "Snake" || other.tag == "Wall")
+		if (other.tag == snakeTag || other.tag == wallTag)
 			Destroy (gameObject);
-		else if (other.tag == "Food") 
+		else if (other.tag == foodTag) 
 		{
 			grow = true;
 			Destroy (other.gameObject);
