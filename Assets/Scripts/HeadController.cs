@@ -86,6 +86,7 @@ public class HeadController : MonoBehaviour
 	void MoveHead ()
 	{
 		rigidbody.transform.position = nextPosition;
+		Debug.Log (rigidbody.transform.position);
 	}
 
 	void Grow ()
