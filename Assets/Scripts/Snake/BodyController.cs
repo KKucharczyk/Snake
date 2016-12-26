@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BodyPart : AbstractBodyPart
+public class BodyController : AbstractBodyController
 {
-	public BodyPart ()
+	public BodyController ()
 	{
 		
 	}

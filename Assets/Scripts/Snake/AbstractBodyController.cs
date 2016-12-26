@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class AbstractBodyPart : MonoBehaviour {
+public abstract class AbstractBodyController : MonoBehaviour {
 	
 	public Sprite[] sprites;
 	protected SpriteRenderer spriteRenderer;

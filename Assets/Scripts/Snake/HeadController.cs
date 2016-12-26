@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HeadScript : AbstractBodyPart
+public class HeadController : AbstractBodyController
 {
 	private Direction previousDirection;
 	private Vector2 newPosition;

@@ -1,81 +1,92 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+	
 public class SnakeController : MonoBehaviour
 {
-	private float nextMove = 0.0f;
-	public float speed;
-	private bool grow;
+	private LinkedList<GameObject> body;
 
-	private GameObject snakeHandler;
-	public GameObject SnakePrefab;
-    private SnakeScript snakeScript;
+	public GameObject HeadPrefab;
+	private GameObject headHandler;
+	private HeadController head;
 
-	private string snakeTag = "Snake";
-	private string wallTag = "Wall";
-	private string foodTag = "Food";
+	public GameObject TailPrefab;
+	private TailController tailScript;
 
-	void Start ()
-	{
-		snakeHandler = Instantiate (SnakePrefab, new Vector2(0.0f, 0.0f),  Quaternion.identity);
-		snakeScript = snakeHandler.GetComponent<SnakeScript> ();
-    }
+	public GameObject BodyPrefab;
+	private BodyController bodyScript;
 
-	void Update ()
-	{
-		if (Input.anyKeyDown) {
-			analyzeKeyPressed ();
-		}
-
-		snakeScript.calculateNewHeadPosition ();
-
-		if (Time.time > nextMove) 
-		{
-			nextMove = Time.time + (1 / speed);
-			snakeScript.moveHead ();
-
-			if (grow)
-				snakeScript.grow ();
-			
-			if (snakeScript.getBodySize() > 0) 
-				snakeScript.updateBodyLocation ();
-			
-			grow = false;
-		}
+    void Awake() {
+		headHandler = Instantiate (HeadPrefab, new Vector2(0.0f, 0.0f),  Quaternion.identity);
+		head = headHandler.GetComponent<HeadController> ();
+		body = new LinkedList<GameObject> ();
+		bodyScript = BodyPrefab.GetComponent<BodyController> ();
+		tailScript = TailPrefab.GetComponent<TailController> ();
 	}
 
-	void analyzeKeyPressed() {
-		if (Input.GetKey (KeyCode.UpArrow)) {
-			updateSnakeOnNewDirection (Direction.UP, 0);
-		}  else if (Input.GetKey (KeyCode.DownArrow)) {
-			updateSnakeOnNewDirection (Direction.DOWN, 1);
-		} else if (Input.GetKey (KeyCode.LeftArrow)) {
-			updateSnakeOnNewDirection (Direction.LEFT, 2);
-		} else if (Input.GetKey (KeyCode.RightArrow)) {
-			updateSnakeOnNewDirection (Direction.RIGHT, 3);
-		} else if (Input.GetKey (KeyCode.Space)) {
-			grow = true;
-		}
+	private bool hasBody() {
+		return body.Count > 0;
 	}
 
-	void updateSnakeOnNewDirection(Direction direction, int spriteIndex) {
-		snakeScript.setPreviousHeadDirection (snakeScript.getCurrentHeadDirection());
-		snakeScript.setCurrentHeadDirection (direction);
-		snakeScript.setHeadDirection (direction);
-		snakeScript.setHeadSprite (snakeScript.getHeadSprite(spriteIndex));
+	public Direction getCurrentHeadDirection() {
+		return head.getCurrentDirection();
 	}
 
-	void OnTriggerEnter2D (Collider2D other)
-	{
-		if (other.tag == snakeTag || other.tag == wallTag)
-			Destroy (gameObject);
-		else if (other.tag == foodTag) 
-		{
-			grow = true;
-			Destroy (other.gameObject);
-		}
+	public Direction getPreviousHeadDirection() {
+		return head.getPreviousDirection();
 	}
+
+	public void setCurrentHeadDirection(Direction direction) {
+		head.setCurrentDirection (direction);
+	}
+
+	public void setPreviousHeadDirection(Direction direction) {
+		head.setPreviousDirection(direction);
+	}
+
+	public void grow() {
+		bodyScript.setCurrentDirection (head.getCurrentDirection());
+		bodyScript.setSpriteAccordingToPlane ();
+		body.AddLast (GameObject.Instantiate (BodyPrefab,  head.getCurrentPosition() - head.getMovment(),  Quaternion.identity));
+	}
+
+	public int getBodySize() {
+		return body.Count;
+	}
+
+	public void setHeadSprite(Sprite sprite) {
+		head.setSprite (sprite);
+	}
+
+	public Sprite getHeadSprite(int index) {
+		return head.getSprite (index);
+	}
+
+	public void setHeadDirection(Direction direction) {
+		head.setMovment (direction);
+	}
+
+	public void calculateNewHeadPosition() {
+		head.calculateNewPosition ();
+	}
+
+	public void moveHead() {
+		head.move ();
+	}
+
+	public void updateBodyLocation() {
+		if (hasBody () && head.isDirectionChanged ()) {
+			bodyScript.setSpriteAccordingToTurn (head.getCurrentDirection (), head.getPreviousDirection ());
+			head.setPreviousDirection (getCurrentHeadDirection ());
+		} else {
+			bodyScript.setCurrentDirection (head.getCurrentDirection ());
+			bodyScript.setSpriteAccordingToPlane ();
+		}
+		body.AddBefore (body.First, Instantiate (BodyPrefab, head.getCurrentPosition () - head.getMovment (), Quaternion.identity));
+		Destroy (body.Last.Value);
+		body.RemoveLast ();
+	}
+
 }
 
 

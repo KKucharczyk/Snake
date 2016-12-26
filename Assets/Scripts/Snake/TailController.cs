@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TailPart : AbstractBodyPart
+public class TailController : AbstractBodyController
 {
 	public GameObject TailPrefab;
 
-	public TailPart ()
+	public TailController ()
 	{
 
 	}
 
 	public GameObject createTail(GameObject bodyPart) {
-		switch (bodyPart.GetComponent<BodyPart>().getCurrentDirection()) {
+		switch (bodyPart.GetComponent<BodyController>().getCurrentDirection()) {
 		case Direction.UP:
 			{
 				this.GetComponent<SpriteRenderer> ().sprite = this.getSprite (1);
