@@ -9,17 +9,13 @@ public class LiveRoutineController : MonoBehaviour
 	private bool grow;
 
 	private GameObject snakeHandler;
-	public GameObject SnakePrefab;
-    private SnakeController snakeScript;
-
-	private string snakeTag = "Snake";
-	private string wallTag = "Wall";
-	private string foodTag = "Food";
+	public GameObject snakePrefab;
+	private SnakeController snakeController;
 
 	void Start ()
 	{
-		snakeHandler = Instantiate (SnakePrefab, new Vector2(0.0f, 0.0f),  Quaternion.identity);
-		snakeScript = snakeHandler.GetComponent<SnakeController> ();
+		snakeHandler = Instantiate (snakePrefab, new Vector2(0.0f, 0.0f),  Quaternion.identity);
+		snakeController = snakeHandler.GetComponent<SnakeController> ();
     }
 
 	void Update ()
@@ -28,18 +24,20 @@ public class LiveRoutineController : MonoBehaviour
 			analyzeKeyPressed ();
 		}
 
-		snakeScript.calculateNewHeadPosition ();
+		snakeController.calculateNewHeadPosition ();
 
 		if (Time.time > nextMove) 
 		{
 			nextMove = Time.time + (1 / speed);
-			snakeScript.moveHead ();
+			snakeController.moveHead ();
 
-			if (grow)
-				snakeScript.grow ();
+			if (grow || snakeController.isGrowing ()) {
+				snakeController.grow ();
+				snakeController.toggleGrowing ();
+			}
 			
-			if (snakeScript.getBodySize() > 0) 
-				snakeScript.updateBodyLocation ();
+			if (snakeController.getBodySize() > 0) 
+				snakeController.updateBodyLocation ();
 			
 			grow = false;
 		}
@@ -60,21 +58,10 @@ public class LiveRoutineController : MonoBehaviour
 	}
 
 	void updateSnakeOnNewDirection(Direction direction, int spriteIndex) {
-		snakeScript.setPreviousHeadDirection (snakeScript.getCurrentHeadDirection());
-		snakeScript.setCurrentHeadDirection (direction);
-		snakeScript.setHeadDirection (direction);
-		snakeScript.setHeadSprite (snakeScript.getHeadSprite(spriteIndex));
-	}
-
-	void OnTriggerEnter2D (Collider2D other)
-	{
-		if (other.tag == snakeTag || other.tag == wallTag)
-			Destroy (gameObject);
-		else if (other.tag == foodTag) 
-		{
-			grow = true;
-			Destroy (other.gameObject);
-		}
+		snakeController.setPreviousHeadDirection (snakeController.getCurrentHeadDirection());
+		snakeController.setCurrentHeadDirection (direction);
+		snakeController.setHeadDirection (direction);
+		snakeController.setHeadSprite (snakeController.getHeadSprite(spriteIndex));
 	}
 }
 

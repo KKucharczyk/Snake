@@ -10,8 +10,8 @@ public class GameController : MonoBehaviour
 	public GameObject mapControllerPrefab;
 	private GameObject mapController;
 
-	public GameObject snakeControllerPrefab;
-	private GameObject snakeController;
+	public GameObject LiveRoutinePrefab;
+	private GameObject liveRoutineController;
 
 	public Vector2 mapSize;
 
@@ -20,7 +20,7 @@ public class GameController : MonoBehaviour
 	{
 		foodController = Instantiate (foodControllerPrefab);
 		mapController = Instantiate (mapControllerPrefab);
-		snakeController = Instantiate (snakeControllerPrefab);
+		liveRoutineController = Instantiate (LiveRoutinePrefab);
 	}
 	
 	// Update is called once per frame

@@ -12,9 +12,13 @@ public class HeadController : AbstractBodyController
 	private Vector2 movmentLeft = new Vector2 (-1.0f, 0.0f);
 	private Vector2 movmentRight = new Vector2 (1.0f, 0.0f);
 
-	private Rigidbody2D rigidbody;
+	private string snakeTag = "Snake";
+	private string wallTag = "Wall";
+	private string foodTag = "Food";
 
+	private Rigidbody2D rigidbody;
 	private Vector2 movment;
+	private bool isGrowing = false;
 
 	void Awake() {
 		rigidbody = this.GetComponent<Rigidbody2D> ();
@@ -81,6 +85,25 @@ public class HeadController : AbstractBodyController
 
 	public bool isDirectionChanged() {
 		return this.getCurrentDirection () != this.getPreviousDirection ();
+	}
+
+	void OnTriggerEnter2D (Collider2D other)
+	{	/*
+		if (other.tag == snakeTag || other.tag == wallTag)
+			Destroy (gameObject);
+		else */if (other.tag == foodTag) 
+		{
+			isGrowing = true;
+			Destroy (other.gameObject);
+		}
+	}
+
+	public bool getIsGrowing() {
+		return isGrowing;
+	}
+
+	public void toggleIsGrowing() {
+		isGrowing = false;
 	}
 }
 

@@ -6,22 +6,22 @@ public class SnakeController : MonoBehaviour
 {
 	private LinkedList<GameObject> body;
 
-	public GameObject HeadPrefab;
+	public GameObject headPrefab;
 	private GameObject headHandler;
-	private HeadController head;
+	private HeadController headController;
 
-	public GameObject TailPrefab;
-	private TailController tailScript;
+	public GameObject tailPrefab;
+	private TailController tailController;
 
-	public GameObject BodyPrefab;
-	private BodyController bodyScript;
+	public GameObject bodyPrefab;
+	private BodyController bodyController;
 
     void Awake() {
-		headHandler = Instantiate (HeadPrefab, new Vector2(0.0f, 0.0f),  Quaternion.identity);
-		head = headHandler.GetComponent<HeadController> ();
+		headHandler = Instantiate (headPrefab, new Vector2(0.0f, 0.0f),  Quaternion.identity);
+		headController = headHandler.GetComponent<HeadController> ();
 		body = new LinkedList<GameObject> ();
-		bodyScript = BodyPrefab.GetComponent<BodyController> ();
-		tailScript = TailPrefab.GetComponent<TailController> ();
+		bodyController = bodyPrefab.GetComponent<BodyController> ();
+		tailController = tailPrefab.GetComponent<TailController> ();
 	}
 
 	private bool hasBody() {
@@ -29,25 +29,25 @@ public class SnakeController : MonoBehaviour
 	}
 
 	public Direction getCurrentHeadDirection() {
-		return head.getCurrentDirection();
+		return headController.getCurrentDirection();
 	}
 
 	public Direction getPreviousHeadDirection() {
-		return head.getPreviousDirection();
+		return headController.getPreviousDirection();
 	}
 
 	public void setCurrentHeadDirection(Direction direction) {
-		head.setCurrentDirection (direction);
+		headController.setCurrentDirection (direction);
 	}
 
 	public void setPreviousHeadDirection(Direction direction) {
-		head.setPreviousDirection(direction);
+		headController.setPreviousDirection(direction);
 	}
 
 	public void grow() {
-		bodyScript.setCurrentDirection (head.getCurrentDirection());
-		bodyScript.setSpriteAccordingToPlane ();
-		body.AddLast (GameObject.Instantiate (BodyPrefab,  head.getCurrentPosition() - head.getMovment(),  Quaternion.identity));
+		bodyController.setCurrentDirection (headController.getCurrentDirection());
+		bodyController.setSpriteAccordingToPlane ();
+		body.AddLast (GameObject.Instantiate (bodyPrefab,  headController.getCurrentPosition() - headController.getMovment(),  Quaternion.identity));
 	}
 
 	public int getBodySize() {
@@ -55,36 +55,44 @@ public class SnakeController : MonoBehaviour
 	}
 
 	public void setHeadSprite(Sprite sprite) {
-		head.setSprite (sprite);
+		headController.setSprite (sprite);
 	}
 
 	public Sprite getHeadSprite(int index) {
-		return head.getSprite (index);
+		return headController.getSprite (index);
 	}
 
 	public void setHeadDirection(Direction direction) {
-		head.setMovment (direction);
+		headController.setMovment (direction);
 	}
 
 	public void calculateNewHeadPosition() {
-		head.calculateNewPosition ();
+		headController.calculateNewPosition ();
 	}
 
 	public void moveHead() {
-		head.move ();
+		headController.move ();
 	}
 
 	public void updateBodyLocation() {
-		if (hasBody () && head.isDirectionChanged ()) {
-			bodyScript.setSpriteAccordingToTurn (head.getCurrentDirection (), head.getPreviousDirection ());
-			head.setPreviousDirection (getCurrentHeadDirection ());
+		if (hasBody () && headController.isDirectionChanged ()) {
+			bodyController.setSpriteAccordingToTurn (headController.getCurrentDirection (), headController.getPreviousDirection ());
+			headController.setPreviousDirection (getCurrentHeadDirection ());
 		} else {
-			bodyScript.setCurrentDirection (head.getCurrentDirection ());
-			bodyScript.setSpriteAccordingToPlane ();
+			bodyController.setCurrentDirection (headController.getCurrentDirection ());
+			bodyController.setSpriteAccordingToPlane ();
 		}
-		body.AddBefore (body.First, Instantiate (BodyPrefab, head.getCurrentPosition () - head.getMovment (), Quaternion.identity));
+		body.AddBefore (body.First, Instantiate (bodyPrefab, headController.getCurrentPosition () - headController.getMovment (), Quaternion.identity));
 		Destroy (body.Last.Value);
 		body.RemoveLast ();
+	}
+
+	public bool isGrowing() {
+		return headController.getIsGrowing ();
+	}
+
+	public void toggleGrowing() {
+		headController.toggleIsGrowing ();
 	}
 
 }
