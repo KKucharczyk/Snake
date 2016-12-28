@@ -88,10 +88,10 @@ public class HeadController : AbstractBodyController
 	}
 
 	void OnTriggerEnter2D (Collider2D other)
-	{	/*
-		if (other.tag == snakeTag || other.tag == wallTag)
+	{	
+		if (other.tag == wallTag || other.tag == snakeTag)
 			Destroy (gameObject);
-		else */if (other.tag == foodTag) 
+		else if (other.tag == foodTag) 
 		{
 			isGrowing = true;
 			Destroy (other.gameObject);
