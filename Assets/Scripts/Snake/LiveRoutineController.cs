@@ -7,6 +7,7 @@ public class LiveRoutineController : MonoBehaviour
 	private float nextMove = 0.0f;
 	public float speed;
 	private bool grow;
+	private bool notMoved= true;
 
 	private GameObject snakeHandler;
 	public GameObject snakePrefab;
@@ -20,8 +21,9 @@ public class LiveRoutineController : MonoBehaviour
 
 	void Update ()
 	{
-		if (Input.anyKeyDown) {
+		if (Input.anyKeyDown && notMoved) {
 			analyzeKeyPressed ();
+			notMoved = false;
 		}
 
 		snakeController.calculateNewHeadPosition ();
@@ -30,6 +32,7 @@ public class LiveRoutineController : MonoBehaviour
 		{
 			nextMove = Time.time + (1 / speed);
 			snakeController.moveHead ();
+			notMoved = true;
 
 			if (grow || snakeController.isGrowing ()) {
 				snakeController.grow ();
