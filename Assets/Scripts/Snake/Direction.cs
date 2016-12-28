@@ -10,5 +10,3 @@ public enum Direction
 	RIGHT,
 	UNDEFINED
 }
-
-

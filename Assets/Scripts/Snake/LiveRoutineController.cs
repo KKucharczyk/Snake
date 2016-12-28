@@ -58,11 +58,15 @@ public class LiveRoutineController : MonoBehaviour
 	}
 
 	void updateSnakeOnNewDirection(Direction direction, int spriteIndex) {
-		snakeController.setPreviousHeadDirection (snakeController.getCurrentHeadDirection());
-		snakeController.setCurrentHeadDirection (direction);
-		snakeController.setHeadDirection (direction);
-		snakeController.setHeadSprite (snakeController.getHeadSprite(spriteIndex));
+		if (direction != DirectionMethods.getOpposite(snakeController.getCurrentHeadDirection ())) {
+			snakeController.setPreviousHeadDirection (snakeController.getCurrentHeadDirection ());
+			snakeController.setCurrentHeadDirection (direction);
+			snakeController.setHeadDirection (direction);
+			snakeController.setHeadSprite (snakeController.getHeadSprite (spriteIndex));
+		}
 	}
+
+
 }
 
 
