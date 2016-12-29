@@ -15,12 +15,16 @@ public class GameController : MonoBehaviour
 
 	public Vector2 mapSize;
 
+	public int score;
+
 	// Use this for initialization
 	void Start () 
 	{
 		foodController = Instantiate (foodControllerPrefab);
 		mapController = Instantiate (mapControllerPrefab);
 		liveRoutineController = Instantiate (LiveRoutinePrefab);
+
+		score = 0;
 	}
 	
 	// Update is called once per frame
@@ -28,4 +32,10 @@ public class GameController : MonoBehaviour
 	{
 		
 	}
+
+	public void AddPoints (int value)
+	{
+		score += value;
+	}
+
 }

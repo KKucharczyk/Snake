@@ -10,7 +10,8 @@ public class FoodController : MonoBehaviour {
 
 	private Vector2 mapSize;
 
-	private GameObject food;
+	public int foodNumber;
+	private GameObject [] food;
 
 
 	// Use this for initialization
@@ -28,24 +29,36 @@ public class FoodController : MonoBehaviour {
 			Destroy (gameObject);
 		}
 
-		food = null;	
+		food = new GameObject [foodNumber];
+		for (int i = 0; i < foodNumber; ++i) 
+		{
+			food [i] = null;
+		}	
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-		if (food == null)
-			SpawnFood (applePrefab);
+		for (int i = 0; i < foodNumber; ++i) 
+		{
+			if (food [i] == null) 
+			{
+				food [i] = SpawnFood (applePrefab);
+			}
+		}	
+
 	}
 
 
-	void SpawnFood (GameObject foodPrefab)
+	GameObject SpawnFood (GameObject foodPrefab)
 	{
 		Vector2 spawnPosition;
 		spawnPosition = RandomPosition ();
 		if (IsFree (spawnPosition))
-			food = Instantiate (foodPrefab, spawnPosition, Quaternion.identity, gameObject.transform); 
+			return Instantiate (foodPrefab, spawnPosition, Quaternion.identity, gameObject.transform); 
+		return null;
 	}
+
 
 	Vector2 RandomPosition ()
 	{
