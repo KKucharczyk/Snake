@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour 
 {
+	public GameObject gameInfoPrefab;
+	private GameObject gameInfo;
+	private GameInfoController gameInfoController;
+
 	public GameObject foodControllerPrefab;
 	private GameObject foodController;
 
@@ -15,15 +19,20 @@ public class GameController : MonoBehaviour
 
 	public Vector2 mapSize;
 
-	public int score;
+	private int level;
+	private int score;
 
 	// Use this for initialization
 	void Start () 
 	{
+		gameInfo = Instantiate (gameInfoPrefab);
+		gameInfoController = gameInfo.GetComponent<GameInfoController> ();
+
 		foodController = Instantiate (foodControllerPrefab);
 		mapController = Instantiate (mapControllerPrefab);
 		liveRoutineController = Instantiate (LiveRoutinePrefab);
 
+		level = 1;
 		score = 0;
 	}
 	
@@ -36,6 +45,7 @@ public class GameController : MonoBehaviour
 	public void AddPoints (int value)
 	{
 		score += value;
+		gameInfoController.UpdateScoreText (score);
 	}
 
 }
