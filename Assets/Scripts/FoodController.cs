@@ -5,6 +5,8 @@ using UnityEngine;
 public class FoodController : MonoBehaviour {
 
 	public GameObject applePrefab;
+	public GameObject cherryPrefab;
+	public GameObject pearPrefab;
 
 	private GameController gameController;
 
@@ -43,7 +45,7 @@ public class FoodController : MonoBehaviour {
 		{
 			if (food [i] == null) 
 			{
-				food [i] = SpawnFood (applePrefab);
+				food [i] = SpawnFood (RandomFoodType());
 			}
 		}	
 
@@ -59,6 +61,19 @@ public class FoodController : MonoBehaviour {
 		return null;
 	}
 
+	GameObject RandomFoodType ()
+	{
+		int number = Random.Range (0, 100);
+
+		if (number <= 60)
+			return cherryPrefab;
+		else if (number <= 90)
+			return applePrefab;
+		else if (number <= 100)
+			return pearPrefab;
+
+		return null;
+	}
 
 	Vector2 RandomPosition ()
 	{

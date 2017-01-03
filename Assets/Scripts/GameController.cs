@@ -44,7 +44,7 @@ public class GameController : MonoBehaviour
 
 	public void AddPoints (int value)
 	{
-		score += value;
+		score += value * level;
 		gameInfoController.UpdateScoreText (score);
 	}
 
