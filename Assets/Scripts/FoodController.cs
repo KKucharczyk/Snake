@@ -5,12 +5,15 @@ using UnityEngine;
 public class FoodController : MonoBehaviour {
 
 	public GameObject applePrefab;
+	public GameObject cherryPrefab;
+	public GameObject pearPrefab;
 
 	private GameController gameController;
 
 	private Vector2 mapSize;
 
-	private GameObject food;
+	public int foodNumber;
+	private GameObject [] food;
 
 
 	// Use this for initialization
@@ -28,23 +31,48 @@ public class FoodController : MonoBehaviour {
 			Destroy (gameObject);
 		}
 
-		food = null;	
+		food = new GameObject [foodNumber];
+		for (int i = 0; i < foodNumber; ++i) 
+		{
+			food [i] = null;
+		}	
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-		if (food == null)
-			SpawnFood (applePrefab);
+		for (int i = 0; i < foodNumber; ++i) 
+		{
+			if (food [i] == null) 
+			{
+				food [i] = SpawnFood (RandomFoodType());
+			}
+		}	
+
 	}
 
 
-	void SpawnFood (GameObject foodPrefab)
+	GameObject SpawnFood (GameObject foodPrefab)
 	{
 		Vector2 spawnPosition;
 		spawnPosition = RandomPosition ();
 		if (IsFree (spawnPosition))
-			food = Instantiate (foodPrefab, spawnPosition, Quaternion.identity, gameObject.transform); 
+			return Instantiate (foodPrefab, spawnPosition, Quaternion.identity, gameObject.transform); 
+		return null;
+	}
+
+	GameObject RandomFoodType ()
+	{
+		int number = Random.Range (0, 100);
+
+		if (number <= 60)
+			return cherryPrefab;
+		else if (number <= 90)
+			return applePrefab;
+		else if (number <= 100)
+			return pearPrefab;
+
+		return null;
 	}
 
 	Vector2 RandomPosition ()
