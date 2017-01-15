@@ -36,6 +36,11 @@ public class BodyController : AbstractBodyController
 			this.setSprite (this.getSprite (5));
 		}
 	}
+
+    public void init(Direction dir)
+    {
+        this.currentDirection = dir;
+    }
 }
 
 

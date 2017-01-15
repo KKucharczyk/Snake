@@ -96,12 +96,15 @@ public class SnakeController : MonoBehaviour
             {
                 bodyController.setSpriteAccordingToPlane();
             }
-            bodyController.setCurrentDirection(headController.getCurrentDirection());
-            body.AddBefore(body.First, Instantiate(bodyPrefab, headController.getCurrentPosition() - headController.getMovment(), Quaternion.identity));
-
-            Debug.Log(headController.getCurrentDirection() + "   " + body.Last.Value.GetComponent<BodyController>().getCurrentDirection());
-
+            bodyPrefab.GetComponent<BodyController>().setCurrentDirection(headController.getCurrentDirection());
+            Debug.Log(headController.getCurrentDirection() + "   ---   " + bodyController.getCurrentDirection());
+            GameObject bodyHandler = Instantiate(bodyPrefab, headController.getCurrentPosition() - headController.getMovment(), Quaternion.identity);
+            bodyHandler.GetComponent<BodyController>().init(getCurrentHeadDirection());
+            body.AddBefore(body.First, bodyHandler);
+            
+            //Debug.Log(headController.getCurrentDirection() + "   " + body.First.Value.GetComponent<BodyController>().getCurrentDirection());
             Destroy(tailHandler);
+            //Debug.Log(headController.getCurrentDirection() +"   ---   " + body.First.Value.GetComponent<BodyController>().getCurrentDirection());
             tailController.createTail(body.Last.Value.GetComponent<BodyController> ().getCurrentDirection());
             tailHandler = Instantiate(tailPrefab, body.Last.Value.GetComponent<Transform> ().position, Quaternion.identity);
             Destroy(body.Last.Value);
