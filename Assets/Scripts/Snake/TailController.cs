@@ -11,8 +11,9 @@ public class TailController : AbstractBodyController
 
 	}
 
-	public GameObject createTail(GameObject bodyPart) {
-		switch (bodyPart.GetComponent<BodyController>().getCurrentDirection()) {
+	public void createTail(Direction direction) {
+        switch (direction) {
+            
 		case Direction.UP:
 			{
 				this.GetComponent<SpriteRenderer> ().sprite = this.getSprite (1);
@@ -34,7 +35,7 @@ public class TailController : AbstractBodyController
 				break;
 			}
 		}
-		return Instantiate (TailPrefab, bodyPart.GetComponent<Transform> ());
+
 	}
 }
 

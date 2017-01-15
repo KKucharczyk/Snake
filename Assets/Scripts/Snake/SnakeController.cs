@@ -11,6 +11,7 @@ public class SnakeController : MonoBehaviour
 	private HeadController headController;
 
 	public GameObject tailPrefab;
+    private GameObject tailHandler;
 	private TailController tailController;
 
 	public GameObject bodyPrefab;
@@ -19,10 +20,11 @@ public class SnakeController : MonoBehaviour
     void Awake() {
 		headHandler = Instantiate (headPrefab, new Vector2(0.0f, 0.0f),  Quaternion.identity);
 		headController = headHandler.GetComponent<HeadController> ();
-		body = new LinkedList<GameObject> ();
 		bodyController = bodyPrefab.GetComponent<BodyController> ();
 		tailController = tailPrefab.GetComponent<TailController> ();
-	}
+
+        body = new LinkedList<GameObject>();
+    }
 
 	private bool hasBody() {
 		return body.Count > 0;
@@ -75,16 +77,31 @@ public class SnakeController : MonoBehaviour
 	}
 
 	public void updateBodyLocation() {
-		if (hasBody () && headController.isDirectionChanged ()) {
-			bodyController.setSpriteAccordingToTurn (headController.getCurrentDirection (), headController.getPreviousDirection ());
-			headController.setPreviousDirection (getCurrentHeadDirection ());
-		} else {
-			bodyController.setCurrentDirection (headController.getCurrentDirection ());
-			bodyController.setSpriteAccordingToPlane ();
-		}
-		body.AddBefore (body.First, Instantiate (bodyPrefab, headController.getCurrentPosition () - headController.getMovment (), Quaternion.identity));
-		Destroy (body.Last.Value);
-		body.RemoveLast ();
+        if (body.Count < 1)
+        {
+            if (tailHandler != null)
+                Destroy(tailHandler);
+            
+            tailController.createTail(headController.getCurrentDirection());
+            Debug.Log("Dir: " + tailController.getCurrentDirection());
+            tailHandler = Instantiate(tailPrefab, headController.getCurrentPosition() - headController.getMovment(), Quaternion.identity);
+        }
+        else
+        {
+            if (hasBody() && headController.isDirectionChanged())
+            {
+                bodyController.setSpriteAccordingToTurn(headController.getCurrentDirection(), headController.getPreviousDirection());
+                headController.setPreviousDirection(getCurrentHeadDirection());
+            }
+            else
+            {
+                bodyController.setCurrentDirection(headController.getCurrentDirection());
+                bodyController.setSpriteAccordingToPlane();
+            }
+            body.AddBefore(body.First, Instantiate(bodyPrefab, headController.getCurrentPosition() - headController.getMovment(), Quaternion.identity));
+            Destroy(body.Last.Value);
+            body.RemoveLast();
+        }
 	}
 
 	public bool isGrowing() {

@@ -38,10 +38,8 @@ public class LiveRoutineController : MonoBehaviour
 				snakeController.grow ();
 				snakeController.toggleGrowing ();
 			}
-			
-			if (snakeController.getBodySize() > 0) 
-				snakeController.updateBodyLocation ();
-			
+
+			snakeController.updateBodyLocation ();
 			grow = false;
 		}
 	}
