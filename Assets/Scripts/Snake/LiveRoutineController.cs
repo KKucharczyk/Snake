@@ -38,7 +38,6 @@ public class LiveRoutineController : MonoBehaviour
 				snakeController.grow ();
 				snakeController.toggleGrowing ();
 			}
-
 			snakeController.updateBodyLocation ();
 			grow = false;
 		}

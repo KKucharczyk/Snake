@@ -17,6 +17,7 @@ public class SnakeController : MonoBehaviour
 	public GameObject bodyPrefab;
 	private BodyController bodyController;
 
+
     void Awake() {
 		headHandler = Instantiate (headPrefab, new Vector2(0.0f, 0.0f),  Quaternion.identity);
 		headController = headHandler.GetComponent<HeadController> ();
@@ -77,17 +78,16 @@ public class SnakeController : MonoBehaviour
 	}
 
 	public void updateBodyLocation() {
-        if (body.Count < 1)
+        if (!hasBody())
         {
             if (tailHandler != null)
                 Destroy(tailHandler);
             tailController.createTail(headController.getCurrentDirection());
-           
             tailHandler = Instantiate(tailPrefab, headController.getCurrentPosition() - headController.getMovment(), Quaternion.identity);
         }
         else
         {
-            if (hasBody() && headController.isDirectionChanged())
+            if (headController.isDirectionChanged())
             {
                 bodyController.setSpriteAccordingToTurn(headController.getCurrentDirection(), headController.getPreviousDirection());
                 headController.setPreviousDirection(getCurrentHeadDirection());
@@ -96,17 +96,15 @@ public class SnakeController : MonoBehaviour
             {
                 bodyController.setSpriteAccordingToPlane();
             }
+            Destroy(tailHandler);
+            tailController.createTail(body.Last.Value.GetComponent<BodyController>().getCurrentDirection());
+            tailHandler = Instantiate(tailPrefab, body.Last.Value.GetComponent<Transform>().position, Quaternion.identity);
+
             bodyPrefab.GetComponent<BodyController>().setCurrentDirection(headController.getCurrentDirection());
-            Debug.Log(headController.getCurrentDirection() + "   ---   " + bodyController.getCurrentDirection());
             GameObject bodyHandler = Instantiate(bodyPrefab, headController.getCurrentPosition() - headController.getMovment(), Quaternion.identity);
             bodyHandler.GetComponent<BodyController>().init(getCurrentHeadDirection());
+
             body.AddBefore(body.First, bodyHandler);
-            
-            //Debug.Log(headController.getCurrentDirection() + "   " + body.First.Value.GetComponent<BodyController>().getCurrentDirection());
-            Destroy(tailHandler);
-            //Debug.Log(headController.getCurrentDirection() +"   ---   " + body.First.Value.GetComponent<BodyController>().getCurrentDirection());
-            tailController.createTail(body.Last.Value.GetComponent<BodyController> ().getCurrentDirection());
-            tailHandler = Instantiate(tailPrefab, body.Last.Value.GetComponent<Transform> ().position, Quaternion.identity);
             Destroy(body.Last.Value);
             body.RemoveLast();
         }
