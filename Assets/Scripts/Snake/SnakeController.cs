@@ -16,7 +16,7 @@ public class SnakeController : MonoBehaviour
 
 	public GameObject bodyPrefab;
 	private BodyController bodyController;
-
+    bool wasGrowing = false;
 
     void Awake() {
 		headHandler = Instantiate (headPrefab, new Vector2(0.0f, 0.0f),  Quaternion.identity);
@@ -51,7 +51,8 @@ public class SnakeController : MonoBehaviour
 		bodyController.setCurrentDirection (headController.getCurrentDirection());
 		bodyController.setSpriteAccordingToPlane ();
 		body.AddLast (GameObject.Instantiate (bodyPrefab,  headController.getCurrentPosition() - headController.getMovment(),  Quaternion.identity));
-	}
+        wasGrowing = true;
+    }
 
 	public int getBodySize() {
 		return body.Count;
@@ -96,10 +97,17 @@ public class SnakeController : MonoBehaviour
             {
                 bodyController.setSpriteAccordingToPlane();
             }
-            Destroy(tailHandler);
-            tailController.createTail(body.Last.Value.GetComponent<BodyController>().getCurrentDirection());
-            tailHandler = Instantiate(tailPrefab, body.Last.Value.GetComponent<Transform>().position, Quaternion.identity);
-
+            /*
+             *  Tail should not change its position while growing,
+             *  this would make a bug, since new body sequence is first element, 
+             *  therefore new tail would appear right before it. 
+             */
+            if (!wasGrowing)
+            {
+                Destroy(tailHandler);
+                tailController.createTail(body.Last.Value.GetComponent<BodyController>().getCurrentDirection());
+                tailHandler = Instantiate(tailPrefab, body.Last.Value.GetComponent<Transform>().position, Quaternion.identity);
+            }
             bodyPrefab.GetComponent<BodyController>().setCurrentDirection(headController.getCurrentDirection());
             GameObject bodyHandler = Instantiate(bodyPrefab, headController.getCurrentPosition() - headController.getMovment(), Quaternion.identity);
             bodyHandler.GetComponent<BodyController>().init(getCurrentHeadDirection());
@@ -108,7 +116,9 @@ public class SnakeController : MonoBehaviour
             Destroy(body.Last.Value);
             body.RemoveLast();
         }
-	}
+        wasGrowing = false;
+
+    }
 
 	public bool isGrowing() {
 		return headController.getIsGrowing ();
