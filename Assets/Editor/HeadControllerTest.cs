@@ -17,10 +17,10 @@ public class HeadControllerTest : MonoBehaviour{
 		Direction direction = Direction.RIGHT;
 
 		// when
-		headController.setMovment(direction);
+		headController.setMovement(direction);
 
 		// then
-		Assert.AreEqual(headController.getMovment(), new Vector2 (1.0f, 0.0f));
+		Assert.AreEqual(headController.getMovement(), new Vector2 (1.0f, 0.0f));
 	}
 
 	[Test]
@@ -29,10 +29,10 @@ public class HeadControllerTest : MonoBehaviour{
 		Direction direction = Direction.LEFT;
 
 		// when
-		headController.setMovment(direction);
+		headController.setMovement(direction);
 
 		// then
-		Assert.AreEqual(headController.getMovment(), new Vector2 (-1.0f, 0.0f));
+		Assert.AreEqual(headController.getMovement(), new Vector2 (-1.0f, 0.0f));
 	}
 
 	[Test]
@@ -41,10 +41,10 @@ public class HeadControllerTest : MonoBehaviour{
 		Direction direction = Direction.UP;
 
 		// when
-		headController.setMovment(direction);
+		headController.setMovement(direction);
 
 		// then
-		Assert.AreEqual(headController.getMovment(), new Vector2 (0.0f, 1.0f));
+		Assert.AreEqual(headController.getMovement(), new Vector2 (0.0f, 1.0f));
 	}
 
 	[Test]
@@ -53,9 +53,9 @@ public class HeadControllerTest : MonoBehaviour{
 		Direction direction = Direction.DOWN;
 
 		// when
-		headController.setMovment(direction);
+		headController.setMovement(direction);
 
 		// then
-		Assert.AreEqual(headController.getMovment(), new Vector2 (0.0f, -1.0f));
+		Assert.AreEqual(headController.getMovement(), new Vector2 (0.0f, -1.0f));
 	}
 }

@@ -4,15 +4,6 @@ using UnityEngine;
 
 public class BodyController : AbstractBodyController
 {
-	public BodyController ()
-	{
-		
-	}
-
-	public void setSprite(Sprite sprite) {
-		this.GetComponent<SpriteRenderer> ().sprite = sprite;
-	}
-
 	public void setSpriteAccordingToPlane() {
 		if (this.getCurrentDirection() == Direction.LEFT || this.getCurrentDirection() == Direction.RIGHT) {
 			this.setSprite (this.getSprite(0));

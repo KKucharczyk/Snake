@@ -50,7 +50,7 @@ public class SnakeController : MonoBehaviour
 	public void grow() {
 		bodyController.setCurrentDirection (headController.getCurrentDirection());
 		bodyController.setSpriteAccordingToPlane ();
-		body.AddLast (GameObject.Instantiate (bodyPrefab,  headController.getCurrentPosition() - headController.getMovment(),  Quaternion.identity));
+		body.AddLast (GameObject.Instantiate (bodyPrefab,  headController.getCurrentPosition() - headController.getMovement(),  Quaternion.identity));
         wasGrowing = true;
     }
 
@@ -67,7 +67,7 @@ public class SnakeController : MonoBehaviour
 	}
 
 	public void setHeadDirection(Direction direction) {
-		headController.setMovment (direction);
+		headController.setMovement (direction);
 	}
 
 	public void calculateNewHeadPosition() {
@@ -84,7 +84,7 @@ public class SnakeController : MonoBehaviour
             if (tailHandler != null)
                 Destroy(tailHandler);
             tailController.createTail(headController.getCurrentDirection());
-            tailHandler = Instantiate(tailPrefab, headController.getCurrentPosition() - headController.getMovment(), Quaternion.identity);
+            tailHandler = Instantiate(tailPrefab, headController.getCurrentPosition() - headController.getMovement(), Quaternion.identity);
         }
         else
         {
@@ -109,7 +109,7 @@ public class SnakeController : MonoBehaviour
                 tailHandler = Instantiate(tailPrefab, body.Last.Value.GetComponent<Transform>().position, Quaternion.identity);
             }
             bodyPrefab.GetComponent<BodyController>().setCurrentDirection(headController.getCurrentDirection());
-            GameObject bodyHandler = Instantiate(bodyPrefab, headController.getCurrentPosition() - headController.getMovment(), Quaternion.identity);
+            GameObject bodyHandler = Instantiate(bodyPrefab, headController.getCurrentPosition() - headController.getMovement(), Quaternion.identity);
             bodyHandler.GetComponent<BodyController>().init(getCurrentHeadDirection());
 
             body.AddBefore(body.First, bodyHandler);

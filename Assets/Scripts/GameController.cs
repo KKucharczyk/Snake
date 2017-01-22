@@ -9,13 +9,10 @@ public class GameController : MonoBehaviour
 	private GameInfoController gameInfoController;
 
 	public GameObject foodControllerPrefab;
-	private GameObject foodController;
 
 	public GameObject mapControllerPrefab;
-	private GameObject mapController;
 
 	public GameObject LiveRoutinePrefab;
-	private GameObject liveRoutineController;
 
 	public Vector2 mapSize;
 
@@ -28,9 +25,9 @@ public class GameController : MonoBehaviour
 		gameInfo = Instantiate (gameInfoPrefab);
 		gameInfoController = gameInfo.GetComponent<GameInfoController> ();
 
-		foodController = Instantiate (foodControllerPrefab);
-		mapController = Instantiate (mapControllerPrefab);
-		liveRoutineController = Instantiate (LiveRoutinePrefab);
+		Instantiate (foodControllerPrefab);
+		Instantiate (mapControllerPrefab);
+		Instantiate (LiveRoutinePrefab);
        
         level = 1;
 		score = 0;

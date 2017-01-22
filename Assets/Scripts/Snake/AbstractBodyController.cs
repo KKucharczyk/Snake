@@ -11,8 +11,7 @@ public abstract class AbstractBodyController : MonoBehaviour {
     protected Vector2 previousPosition;
 
     public Sprite[] sprites;
-	protected SpriteRenderer spriteRenderer;
-	
+    protected SpriteRenderer spriteRenderer;
 
     protected readonly Vector2 movmentUp = new Vector2(0.0f, 1.0f);
     protected readonly Vector2 movmentDown = new Vector2(0.0f, -1.0f);
@@ -57,6 +56,16 @@ public abstract class AbstractBodyController : MonoBehaviour {
         this.previousPosition = position;
     }
 
+    public Sprite getSprite(int index)
+    {
+        return this.sprites[index];
+    }
+
+    public void setSprite(Sprite sprite)
+    {
+        this.GetComponent<SpriteRenderer>().sprite = sprite;
+    }
+
     protected Direction findDirection(Vector2 currentPosition, Vector2 previousPosition) {
 		if (currentPosition.x > previousPosition.x)
 			return Direction.RIGHT;
@@ -68,8 +77,5 @@ public abstract class AbstractBodyController : MonoBehaviour {
 			return Direction.DOWN;
 		return Direction.UNDEFINED;
 	}
-		
-	public Sprite getSprite(int index) {
-		return this.sprites[index];
-	}
+
 }
