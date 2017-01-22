@@ -8,38 +8,15 @@ public class HeadController : AbstractBodyController
 	private Direction previousDirection;
 	private Vector2 newPosition;
 
-	private Vector2 movmentUp = new Vector2 (0.0f, 1.0f);
-	private Vector2 movmentDown = new Vector2 (0.0f, -1.0f);
-	private Vector2 movmentLeft = new Vector2 (-1.0f, 0.0f);
-	private Vector2 movmentRight = new Vector2 (1.0f, 0.0f);
+    private Vector2 movment;
+    private bool isGrowing = false;
 
-	private string snakeTag = "Snake";
-	private string wallTag = "Wall";
-	private string foodTag = "Food";
-
-	private Rigidbody2D rigidbody;
-	private Vector2 movment;
-	private bool isGrowing = false;
+	private readonly string snakeTag = "Snake";
+	private readonly string wallTag = "Wall";
+	private readonly string foodTag = "Food";
 
 	void Awake() {
-		rigidbody = this.GetComponent<Rigidbody2D> ();
-		rigidbody.position = new Vector2 (0.0f, 0.0f);
-	}
-
-	public Vector2 getCurrentPosition() {
-		return rigidbody.position;
-	}
-
-	public void setCurrentPosition(Vector2 position) {
-		rigidbody.position = position;
-	}
-
-	public Direction getPreviousDirection() {
-		return previousDirection;
-	}
-
-	public void setPreviousDirection(Direction direction) {
-		this.previousDirection = direction;
+        this.GetComponent<Rigidbody2D>().position = new Vector2 (0.0f, 0.0f);
 	}
 
 	public void setSprite(Sprite sprite) {
