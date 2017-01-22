@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class HeadController : AbstractBodyController
 {
     private Vector2 movement;
-    private bool isGrowing = false;
+    private bool growing = false;
 
 	private readonly string snakeTag = "Snake";
 	private readonly string wallTag = "Wall";
@@ -43,11 +43,11 @@ public class HeadController : AbstractBodyController
         }
     }
 
-    public void calculateNewPosition() {
+    public void calculateCurrentPosition() {
         this.setCurrentPosition((this.getCurrentPosition() + this.getMovement()));
 	}
 
-	public void move() {
+	public void moveSpriteToCurrentPosition() {
 		this.GetComponent<Rigidbody2D> ().transform.position = this.getCurrentPosition ();
 	}
 
@@ -55,27 +55,33 @@ public class HeadController : AbstractBodyController
 		return this.getCurrentDirection () != this.getPreviousDirection ();
 	}
 
-	void OnTriggerEnter2D (Collider2D other)
-	{
+    public bool getGrowing()
+    {
+        return this.growing;
+    }
+
+    public void setGrowing(bool value) {
+		this.growing = value;
+	}
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        GameObject headGameObject = this.gameObject;
+        GameObject objectInCollision = other.gameObject;
+
         if (other.tag == wallTag || other.tag == snakeTag)
         {
             SceneManager.LoadScene("EndGame");
-            Destroy(gameObject);
+            Destroy(headGameObject);
         }
         else if (other.tag == foodTag)
         {
-            isGrowing = true;
-            Destroy(other.gameObject);
+            growing = true;
+            Destroy(objectInCollision);
         }
-	}
+    }
 
-	public bool getIsGrowing() {
-		return isGrowing;
-	}
-
-	public void toggleIsGrowing() {
-		isGrowing = false;
-	}
+   
 }
 
 

@@ -23,40 +23,46 @@ public class SnakeController : MonoBehaviour
 		headController = headHandler.GetComponent<HeadController> ();
 		bodyController = bodyPrefab.GetComponent<BodyController> ();
 		tailController = tailPrefab.GetComponent<TailController> ();
-
         body = new LinkedList<GameObject>();
     }
-
-	private bool hasBody() {
-		return body.Count > 0;
-	}
 
 	public Direction getCurrentHeadDirection() {
 		return headController.getCurrentDirection();
 	}
 
-	public Direction getPreviousHeadDirection() {
-		return headController.getPreviousDirection();
-	}
+    public void setCurrentHeadDirection(Direction direction)
+    {
+        headController.setCurrentDirection(direction);
+    }
 
-	public void setCurrentHeadDirection(Direction direction) {
-		headController.setCurrentDirection (direction);
+    public Direction getPreviousHeadDirection() {
+		return headController.getPreviousDirection();
 	}
 
 	public void setPreviousHeadDirection(Direction direction) {
 		headController.setPreviousDirection(direction);
 	}
 
-	public void grow() {
-		bodyController.setCurrentDirection (headController.getCurrentDirection());
-		bodyController.setSpriteAccordingToPlane ();
-		body.AddLast (GameObject.Instantiate (bodyPrefab,  headController.getCurrentPosition() - headController.getMovement(),  Quaternion.identity));
+    private bool hasAnyBody()
+    {
+        return body.Count > 0;
+    }
+
+    public void grow() {
+        prepareBodyPrefab();
+        body.AddLast (createNewBodyPrefab());
         wasGrowing = true;
     }
 
-	public int getBodySize() {
-		return body.Count;
-	}
+    private void prepareBodyPrefab()
+    {
+        bodyController.setCurrentDirection(headController.getCurrentDirection());
+        bodyController.setSpriteAccordingToPlane();
+    }
+
+    private GameObject createNewBodyPrefab() {
+        return GameObject.Instantiate(bodyPrefab, headController.getCurrentPosition() - headController.getMovement(), Quaternion.identity);
+    }
 
 	public void setHeadSprite(Sprite sprite) {
 		headController.setSprite (sprite);
@@ -71,15 +77,24 @@ public class SnakeController : MonoBehaviour
 	}
 
 	public void calculateNewHeadPosition() {
-		headController.calculateNewPosition ();
+		headController.calculateCurrentPosition();
 	}
 
 	public void moveHead() {
-		headController.move ();
+		headController.moveSpriteToCurrentPosition();
 	}
 
-	public void updateBodyLocation() {
-        if (!hasBody())
+	public bool isGrowing() {
+		return headController.getGrowing ();
+	}
+
+	public void toggleGrowing() {
+		headController.setGrowing (false);
+	}
+
+    public void updateBodyLocation()
+    {
+        if (!hasAnyBody())
         {
             if (tailHandler != null)
                 Destroy(tailHandler);
@@ -119,14 +134,6 @@ public class SnakeController : MonoBehaviour
         wasGrowing = false;
 
     }
-
-	public bool isGrowing() {
-		return headController.getIsGrowing ();
-	}
-
-	public void toggleGrowing() {
-		headController.toggleIsGrowing ();
-	}
 
 }
 
