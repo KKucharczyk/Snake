@@ -31,8 +31,8 @@ public class GameController : MonoBehaviour
 		foodController = Instantiate (foodControllerPrefab);
 		mapController = Instantiate (mapControllerPrefab);
 		liveRoutineController = Instantiate (LiveRoutinePrefab);
-
-		level = 1;
+       
+        level = 1;
 		score = 0;
 	}
 	
@@ -46,6 +46,8 @@ public class GameController : MonoBehaviour
 	{
 		score += value * level;
 		gameInfoController.UpdateScoreText (score);
-	}
+        PlayerPrefs.SetInt("score", score);
+
+    }
 
 }

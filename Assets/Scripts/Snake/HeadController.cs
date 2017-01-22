@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class HeadController : AbstractBodyController
 {
@@ -88,14 +89,17 @@ public class HeadController : AbstractBodyController
 	}
 
 	void OnTriggerEnter2D (Collider2D other)
-	{	
-		if (other.tag == wallTag || other.tag == snakeTag)
-			Destroy (gameObject);
-		else if (other.tag == foodTag) 
-		{
-			isGrowing = true;
-			Destroy (other.gameObject);
-		}
+	{
+        if (other.tag == wallTag || other.tag == snakeTag)
+        {
+            SceneManager.LoadScene("EndGame");
+            Destroy(gameObject);
+        }
+        else if (other.tag == foodTag)
+        {
+            isGrowing = true;
+            Destroy(other.gameObject);
+        }
 	}
 
 	public bool getIsGrowing() {
