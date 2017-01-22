@@ -8,9 +8,9 @@ public class EndGameController : MonoBehaviour {
     public Text scoreText;
 
     // Use this for initialization
-    void Start () {
-        scoreText.text = "Score: " + PlayerPrefs.GetInt("score");
-    }
+        void Start () {
+            scoreText.text = "Score: " + PlayerPrefs.GetInt("score");
+        }
 
     public void ExitPressed()
     {
