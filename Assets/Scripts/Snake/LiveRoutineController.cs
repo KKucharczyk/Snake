@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class LiveRoutineController : MonoBehaviour
 {
-	private float nextMove = 0.0f;
-	public float speed;
-
-	private Direction currentHeadDirection = Direction.UNDEFINED;
+    public readonly float gameSpeed;
+    private float nextMove = 0.0f;
 
 	private GameObject snakeHandler;
-	public GameObject snakePrefab;
+	public readonly GameObject snakePrefab;
 	private SnakeController snakeController;
+
+    private IControl snakeControl = new KeyboardControl();
 
 	void Start ()
 	{
@@ -21,45 +21,21 @@ public class LiveRoutineController : MonoBehaviour
 
 	void Update ()
 	{
-		analyzeKeyPressed ();
+        if (Input.anyKeyDown)
+            snakeController.setCurrentHeadDirection(snakeControl.getNewDirection(snakeController.getCurrentHeadDirection()));
 
-		if (Time.time > nextMove) 
+        if (Time.time > nextMove) 
 		{
-			nextMove = Time.time + (0.8f - 0.05f * speed);
+			nextMove = Time.time + (0.8f - 0.05f * gameSpeed);
+            snakeController.moveSnake();
 
-			updateSnakeOnNewDirection (currentHeadDirection, (int)currentHeadDirection);
-			snakeController.calculateNewHeadPosition ();
-			snakeController.moveHead ();
-
-			if (snakeController.isGrowing ()) {
+            if (snakeController.isGrowing ()) {
 				snakeController.grow ();
-				snakeController.toggleGrowing ();
 			}
 			snakeController.updateBodyLocation ();
-		}
+            snakeController.setPreviousHeadDirection(snakeController.getCurrentHeadDirection());
+        }
 	}
-
-	void analyzeKeyPressed() {
-		if (Input.GetKey (KeyCode.UpArrow) && currentHeadDirection != Direction.DOWN) {
-            currentHeadDirection = Direction.UP;
-		}  else if (Input.GetKey (KeyCode.DownArrow) && currentHeadDirection != Direction.UP) {
-            currentHeadDirection = Direction.DOWN;
-		} else if (Input.GetKey (KeyCode.LeftArrow) && currentHeadDirection != Direction.RIGHT) {
-            currentHeadDirection = Direction.LEFT;
-		} else if (Input.GetKey (KeyCode.RightArrow) && currentHeadDirection != Direction.LEFT) {
-            currentHeadDirection = Direction.RIGHT;
-		} 
-	}
-
-	void updateSnakeOnNewDirection(Direction direction, int spriteIndex) {
-		if (direction != DirectionMethods.getOpposite(snakeController.getCurrentHeadDirection ())) {
-			snakeController.setPreviousHeadDirection (snakeController.getCurrentHeadDirection ());
-			snakeController.setCurrentHeadDirection (direction);
-			snakeController.setHeadDirection (direction);
-			snakeController.setHeadSprite (snakeController.getHeadSprite (spriteIndex));
-		}
-	}
-
 
 }
 

@@ -52,6 +52,7 @@ public class SnakeController : MonoBehaviour
         prepareBodyPrefab();
         body.AddLast (createNewBodyPrefab());
         wasGrowing = true;
+        this.toggleGrowing();
     }
 
     private void prepareBodyPrefab()
@@ -72,7 +73,7 @@ public class SnakeController : MonoBehaviour
 		return headController.getSprite (index);
 	}
 
-	public void setHeadDirection(Direction direction) {
+	public void setMovement(Direction direction) {
 		headController.setMovement (direction);
 	}
 
@@ -133,6 +134,13 @@ public class SnakeController : MonoBehaviour
         }
         wasGrowing = false;
 
+    }
+
+    public void moveSnake() {
+        this.setMovement(this.getCurrentHeadDirection());
+        this.setHeadSprite(this.getHeadSprite((int) this.getCurrentHeadDirection()));
+        this.calculateNewHeadPosition();
+        this.moveHead();
     }
 
 }
