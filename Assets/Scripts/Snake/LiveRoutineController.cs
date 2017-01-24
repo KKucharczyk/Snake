@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class LiveRoutineController : MonoBehaviour
 {
@@ -8,7 +6,7 @@ public class LiveRoutineController : MonoBehaviour
     private float nextMove = 0.0f;
 
 	private GameObject snakeHandler;
-	public readonly GameObject snakePrefab;
+	public GameObject snakePrefab;
 	private SnakeController snakeController;
 
     private IControl snakeControl = new KeyboardControl();

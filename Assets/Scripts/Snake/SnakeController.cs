@@ -6,7 +6,6 @@ public class SnakeController : MonoBehaviour
 {
 	private LinkedList<GameObject> body;
 
-	public GameObject headPrefab;
 	private GameObject headHandler;
 	private HeadController headController;
 
@@ -19,7 +18,7 @@ public class SnakeController : MonoBehaviour
     bool wasGrowing = false;
 
     void Awake() {
-		headHandler = Instantiate (headPrefab, new Vector2(0.0f, 0.0f),  Quaternion.identity);
+        headHandler = SnakeSequenceFactory.createHeadController(new Vector2(0.0f, 0.0f));
 		headController = headHandler.GetComponent<HeadController> ();
 		bodyController = bodyPrefab.GetComponent<BodyController> ();
 		tailController = tailPrefab.GetComponent<TailController> ();
@@ -48,50 +47,25 @@ public class SnakeController : MonoBehaviour
         return body.Count > 0;
     }
 
-    public void grow() {
-        prepareBodyPrefab();
-        body.AddLast (createNewBodyPrefab());
-        wasGrowing = true;
-        this.toggleGrowing();
-    }
-
-    private void prepareBodyPrefab()
+    public bool isGrowing()
     {
-        bodyController.setCurrentDirection(headController.getCurrentDirection());
+        return headController.getGrowing();
+    }
+
+    public void grow() {
         bodyController.setSpriteAccordingToPlane();
+        SnakeSequenceFactory.getReferenceToBodyController().setCurrentDirection(headController.getCurrentDirection());
+        body.AddLast (SnakeSequenceFactory.createBodyController(headController.getCurrentPosition() - headController.getMovement()));
+        wasGrowing = true;
+        headController.setGrowing(false);
     }
 
-    private GameObject createNewBodyPrefab() {
-        return GameObject.Instantiate(bodyPrefab, headController.getCurrentPosition() - headController.getMovement(), Quaternion.identity);
+    public void moveSnake() {
+        headController.setMovement(this.getCurrentHeadDirection());
+        headController.setSprite(headController.getSprite((int) this.getCurrentHeadDirection()));
+        headController.calculateCurrentPosition();
+        headController.moveSpriteToCurrentPosition();
     }
-
-	public void setHeadSprite(Sprite sprite) {
-		headController.setSprite (sprite);
-	}
-
-	public Sprite getHeadSprite(int index) {
-		return headController.getSprite (index);
-	}
-
-	public void setMovement(Direction direction) {
-		headController.setMovement (direction);
-	}
-
-	public void calculateNewHeadPosition() {
-		headController.calculateCurrentPosition();
-	}
-
-	public void moveHead() {
-		headController.moveSpriteToCurrentPosition();
-	}
-
-	public bool isGrowing() {
-		return headController.getGrowing ();
-	}
-
-	public void toggleGrowing() {
-		headController.setGrowing (false);
-	}
 
     public void updateBodyLocation()
     {
@@ -100,7 +74,7 @@ public class SnakeController : MonoBehaviour
             if (tailHandler != null)
                 Destroy(tailHandler);
             tailController.createTail(headController.getCurrentDirection());
-            tailHandler = Instantiate(tailPrefab, headController.getCurrentPosition() - headController.getMovement(), Quaternion.identity);
+            tailHandler = SnakeSequenceFactory.createTailController(headController.getCurrentPosition() - headController.getMovement());
         }
         else
         {
@@ -113,19 +87,17 @@ public class SnakeController : MonoBehaviour
             {
                 bodyController.setSpriteAccordingToPlane();
             }
-            /*
-             *  Tail should not change its position while growing,
-             *  this would make a bug, since new body sequence is first element, 
-             *  therefore new tail would appear right before it. 
-             */
+ 
             if (!wasGrowing)
             {
                 Destroy(tailHandler);
+                
                 tailController.createTail(body.Last.Value.GetComponent<BodyController>().getCurrentDirection());
-                tailHandler = Instantiate(tailPrefab, body.Last.Value.GetComponent<Transform>().position, Quaternion.identity);
+                tailHandler = SnakeSequenceFactory.createTailController(body.Last.Value.GetComponent<Transform>().position);
             }
-            bodyPrefab.GetComponent<BodyController>().setCurrentDirection(headController.getCurrentDirection());
-            GameObject bodyHandler = Instantiate(bodyPrefab, headController.getCurrentPosition() - headController.getMovement(), Quaternion.identity);
+            SnakeSequenceFactory.getReferenceToBodyController().setCurrentDirection(headController.getCurrentDirection());
+            
+            GameObject bodyHandler = SnakeSequenceFactory.createBodyController(headController.getCurrentPosition() - headController.getMovement());
             bodyHandler.GetComponent<BodyController>().init(getCurrentHeadDirection());
 
             body.AddBefore(body.First, bodyHandler);
@@ -134,13 +106,6 @@ public class SnakeController : MonoBehaviour
         }
         wasGrowing = false;
 
-    }
-
-    public void moveSnake() {
-        this.setMovement(this.getCurrentHeadDirection());
-        this.setHeadSprite(this.getHeadSprite((int) this.getCurrentHeadDirection()));
-        this.calculateNewHeadPosition();
-        this.moveHead();
     }
 
 }

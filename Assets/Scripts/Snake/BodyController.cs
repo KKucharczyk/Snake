@@ -5,32 +5,32 @@ using UnityEngine;
 public class BodyController : AbstractBodyController
 {
 	public void setSpriteAccordingToPlane() {
-		if (this.getCurrentDirection() == Direction.LEFT || this.getCurrentDirection() == Direction.RIGHT) {
-			this.setSprite (this.getSprite(0));
+		if (SnakeSequenceFactory.getReferenceToBodyController().getCurrentDirection() == Direction.LEFT || SnakeSequenceFactory.getReferenceToBodyController().getCurrentDirection() == Direction.RIGHT) {
+            SnakeSequenceFactory.getReferenceToBodyController().setSprite (SnakeSequenceFactory.getReferenceToBodyController().getSprite(0));
 		}
-		if (this.getCurrentDirection() == Direction.UP || this.getCurrentDirection() == Direction.DOWN) {
-			this.setSprite (this.getSprite(1));
+		if (SnakeSequenceFactory.getReferenceToBodyController().getCurrentDirection() == Direction.UP || SnakeSequenceFactory.getReferenceToBodyController().getCurrentDirection() == Direction.DOWN) {
+            SnakeSequenceFactory.getReferenceToBodyController().setSprite (SnakeSequenceFactory.getReferenceToBodyController().getSprite(1));
 		}
 	}
 
 	public void setSpriteAccordingToTurn(Direction currentHeadDirection, Direction previousHeadDirection) {
 		if ((currentHeadDirection == Direction.UP && previousHeadDirection == Direction.RIGHT) || ((currentHeadDirection == Direction.LEFT && previousHeadDirection == Direction.DOWN))) {
-			this.setSprite (this.getSprite (3));
+            SnakeSequenceFactory.getReferenceToBodyController().setSprite (SnakeSequenceFactory.getReferenceToBodyController().getSprite (3));
 		}
 		if ((currentHeadDirection == Direction.UP && previousHeadDirection == Direction.LEFT) || ((currentHeadDirection == Direction.RIGHT && previousHeadDirection == Direction.DOWN))) {
-			this.setSprite (this.getSprite (4));
+            SnakeSequenceFactory.getReferenceToBodyController().setSprite (SnakeSequenceFactory.getReferenceToBodyController().getSprite (4));
 		}
 		if ((currentHeadDirection == Direction.DOWN && previousHeadDirection == Direction.RIGHT) || ((currentHeadDirection == Direction.LEFT && previousHeadDirection == Direction.UP))) {
-			this.setSprite (this.getSprite (2));
+            SnakeSequenceFactory.getReferenceToBodyController().setSprite (SnakeSequenceFactory.getReferenceToBodyController().getSprite (2));
 		}
 		if ((currentHeadDirection == Direction.DOWN && previousHeadDirection == Direction.LEFT) || ((currentHeadDirection == Direction.RIGHT && previousHeadDirection == Direction.UP))) {
-			this.setSprite (this.getSprite (5));
+            SnakeSequenceFactory.getReferenceToBodyController().setSprite (SnakeSequenceFactory.getReferenceToBodyController().getSprite (5));
 		}
 	}
 
     public void init(Direction dir)
     {
-        this.currentDirection = dir;
+       this.currentDirection = dir;
     }
 }
 
