@@ -10,8 +10,9 @@ public class LiveRoutineController : MonoBehaviour
 	private SnakeController snakeController;
 
     private IControl snakeControl = new KeyboardControl();
+    private IControl snakeControl2 = new TouchControl();
 
-	void Start ()
+    void Start ()
 	{
 		snakeHandler = Instantiate (snakePrefab, new Vector2(0.0f, 0.0f),  Quaternion.identity);
 		snakeController = snakeHandler.GetComponent<SnakeController> ();
@@ -21,6 +22,15 @@ public class LiveRoutineController : MonoBehaviour
 	{
         if (Input.anyKeyDown)
             snakeController.setCurrentHeadDirection(snakeControl.getNewDirection(snakeController.getCurrentHeadDirection()));
+        else {
+
+            if (Input.touchCount > 0)
+            {
+                Direction a = snakeControl2.getNewDirection(snakeController.getCurrentHeadDirection());
+                if(a != Direction.UNDEFINED)
+                    snakeController.setCurrentHeadDirection(a);
+            }
+        }
 
         if (Time.time > nextMove) 
 		{
