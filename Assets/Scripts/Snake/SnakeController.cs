@@ -35,11 +35,11 @@ public class SnakeController : MonoBehaviour
     }
 
     public Direction getPreviousHeadDirection() {
-		return headController.getPreviousDirection();
+		return headController.PreviousDirection;
 	}
 
 	public void setPreviousHeadDirection(Direction direction) {
-		headController.setPreviousDirection(direction);
+		headController.PreviousDirection = direction;
 	}
 
     private bool hasAnyBody()
@@ -80,8 +80,8 @@ public class SnakeController : MonoBehaviour
         {
             if (headController.isDirectionChanged())
             {
-                bodyController.setSpriteAccordingToTurn(headController.CurrentDirection, headController.getPreviousDirection());
-                headController.setPreviousDirection(getCurrentHeadDirection());
+                bodyController.setSpriteAccordingToTurn(headController.CurrentDirection, headController.PreviousDirection);
+                headController.PreviousDirection = getCurrentHeadDirection();
             }
             else
             {

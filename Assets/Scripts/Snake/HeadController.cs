@@ -52,7 +52,7 @@ public class HeadController : AbstractBodyController
 	}
 
 	public bool isDirectionChanged() {
-		return this.CurrentDirection != this.getPreviousDirection ();
+		return this.CurrentDirection != this.PreviousDirection;
 	}
 
     public bool getGrowing()

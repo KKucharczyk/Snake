@@ -5,13 +5,26 @@ using UnityEngine;
 public abstract class AbstractBodyController : MonoBehaviour {
 
     protected Direction currentDirection;
-    public Direction CurrentDirection { get {
+    public Direction CurrentDirection {
+        get {
             return currentDirection;
         }
-    set {
+        set {
             currentDirection = value;
-        } }
+        }
+    }
     protected Direction previousDirection;
+    public Direction PreviousDirection
+    {
+        get
+        {
+            return previousDirection;
+        }
+        set
+        {
+            previousDirection = value;
+        }
+    }
 
     protected Vector2 currentPosition;
     protected Vector2 previousPosition;
@@ -23,16 +36,6 @@ public abstract class AbstractBodyController : MonoBehaviour {
     protected readonly Vector2 movmentDown = new Vector2(0.0f, -1.0f);
     protected readonly Vector2 movmentLeft = new Vector2(-1.0f, 0.0f);
     protected readonly Vector2 movmentRight = new Vector2(1.0f, 0.0f);
-
-    public Direction getPreviousDirection()
-    {
-        return previousDirection;
-    }
-
-    public void setPreviousDirection(Direction direction)
-    {
-        this.previousDirection = direction;
-    }
 
     public Vector2 getCurrentPosition()
     {
