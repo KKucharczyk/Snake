@@ -55,7 +55,7 @@ public class SnakeController : MonoBehaviour
     public void grow() {
         bodyController.setSpriteAccordingToPlane();
         SnakeSequenceFactory.getReferenceToBodyController().CurrentDirection = headController.CurrentDirection;
-        body.AddLast (SnakeSequenceFactory.createBodyController(headController.getCurrentPosition() - headController.getMovement()));
+        body.AddLast (SnakeSequenceFactory.createBodyController(headController.CurrentPosition - headController.getMovement()));
         wasGrowing = true;
         headController.setGrowing(false);
     }
@@ -74,7 +74,7 @@ public class SnakeController : MonoBehaviour
             if (tailHandler != null)
                 Destroy(tailHandler);
             tailController.createTail(headController.CurrentDirection);
-            tailHandler = SnakeSequenceFactory.createTailController(headController.getCurrentPosition() - headController.getMovement());
+            tailHandler = SnakeSequenceFactory.createTailController(headController.CurrentPosition - headController.getMovement());
         }
         else
         {
@@ -97,7 +97,7 @@ public class SnakeController : MonoBehaviour
             }
             SnakeSequenceFactory.getReferenceToBodyController().CurrentDirection = headController.CurrentDirection;
             
-            GameObject bodyHandler = SnakeSequenceFactory.createBodyController(headController.getCurrentPosition() - headController.getMovement());
+            GameObject bodyHandler = SnakeSequenceFactory.createBodyController(headController.CurrentPosition - headController.getMovement());
             bodyHandler.GetComponent<BodyController>().init(getCurrentHeadDirection());
 
             body.AddBefore(body.First, bodyHandler);

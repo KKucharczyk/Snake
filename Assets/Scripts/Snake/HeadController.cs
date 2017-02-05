@@ -44,11 +44,11 @@ public class HeadController : AbstractBodyController
     }
 
     public void calculateCurrentPosition() {
-        this.setCurrentPosition((this.getCurrentPosition() + this.getMovement()));
+        this.CurrentPosition = (this.CurrentPosition + this.getMovement());
 	}
 
 	public void moveSpriteToCurrentPosition() {
-		this.GetComponent<Rigidbody2D> ().transform.position = this.getCurrentPosition ();
+		this.GetComponent<Rigidbody2D> ().transform.position = this.CurrentPosition;
 	}
 
 	public bool isDirectionChanged() {
