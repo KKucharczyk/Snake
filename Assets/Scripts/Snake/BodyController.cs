@@ -5,10 +5,10 @@ using UnityEngine;
 public class BodyController : AbstractBodyController
 {
 	public void setSpriteAccordingToPlane() {
-		if (SnakeSequenceFactory.getReferenceToBodyController().getCurrentDirection() == Direction.LEFT || SnakeSequenceFactory.getReferenceToBodyController().getCurrentDirection() == Direction.RIGHT) {
+		if (SnakeSequenceFactory.getReferenceToBodyController().CurrentDirection == Direction.LEFT || SnakeSequenceFactory.getReferenceToBodyController().CurrentDirection == Direction.RIGHT) {
             SnakeSequenceFactory.getReferenceToBodyController().setSprite (SnakeSequenceFactory.getReferenceToBodyController().getSprite(0));
 		}
-		if (SnakeSequenceFactory.getReferenceToBodyController().getCurrentDirection() == Direction.UP || SnakeSequenceFactory.getReferenceToBodyController().getCurrentDirection() == Direction.DOWN) {
+		if (SnakeSequenceFactory.getReferenceToBodyController().CurrentDirection == Direction.UP || SnakeSequenceFactory.getReferenceToBodyController().CurrentDirection == Direction.DOWN) {
             SnakeSequenceFactory.getReferenceToBodyController().setSprite (SnakeSequenceFactory.getReferenceToBodyController().getSprite(1));
 		}
 	}

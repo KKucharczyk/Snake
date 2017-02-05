@@ -26,12 +26,12 @@ public class SnakeController : MonoBehaviour
     }
 
 	public Direction getCurrentHeadDirection() {
-		return headController.getCurrentDirection();
+		return headController.CurrentDirection;
 	}
 
     public void setCurrentHeadDirection(Direction direction)
     {
-        headController.setCurrentDirection(direction);
+        headController.CurrentDirection = direction;
     }
 
     public Direction getPreviousHeadDirection() {
@@ -54,7 +54,7 @@ public class SnakeController : MonoBehaviour
 
     public void grow() {
         bodyController.setSpriteAccordingToPlane();
-        SnakeSequenceFactory.getReferenceToBodyController().setCurrentDirection(headController.getCurrentDirection());
+        SnakeSequenceFactory.getReferenceToBodyController().CurrentDirection = headController.CurrentDirection;
         body.AddLast (SnakeSequenceFactory.createBodyController(headController.getCurrentPosition() - headController.getMovement()));
         wasGrowing = true;
         headController.setGrowing(false);
@@ -73,14 +73,14 @@ public class SnakeController : MonoBehaviour
         {
             if (tailHandler != null)
                 Destroy(tailHandler);
-            tailController.createTail(headController.getCurrentDirection());
+            tailController.createTail(headController.CurrentDirection);
             tailHandler = SnakeSequenceFactory.createTailController(headController.getCurrentPosition() - headController.getMovement());
         }
         else
         {
             if (headController.isDirectionChanged())
             {
-                bodyController.setSpriteAccordingToTurn(headController.getCurrentDirection(), headController.getPreviousDirection());
+                bodyController.setSpriteAccordingToTurn(headController.CurrentDirection, headController.getPreviousDirection());
                 headController.setPreviousDirection(getCurrentHeadDirection());
             }
             else
@@ -92,10 +92,10 @@ public class SnakeController : MonoBehaviour
             {
                 Destroy(tailHandler);
                 
-                tailController.createTail(body.Last.Value.GetComponent<BodyController>().getCurrentDirection());
+                tailController.createTail(body.Last.Value.GetComponent<BodyController>().CurrentDirection);
                 tailHandler = SnakeSequenceFactory.createTailController(body.Last.Value.GetComponent<Transform>().position);
             }
-            SnakeSequenceFactory.getReferenceToBodyController().setCurrentDirection(headController.getCurrentDirection());
+            SnakeSequenceFactory.getReferenceToBodyController().CurrentDirection = headController.CurrentDirection;
             
             GameObject bodyHandler = SnakeSequenceFactory.createBodyController(headController.getCurrentPosition() - headController.getMovement());
             bodyHandler.GetComponent<BodyController>().init(getCurrentHeadDirection());
