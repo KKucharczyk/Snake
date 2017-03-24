@@ -53,7 +53,7 @@ public class SnakeController : MonoBehaviour
     }
 
     public void grow() {
-        bodyController.setSpriteAccordingToPlane();
+		bodyController.setSpriteAccordingToPlane(this.getCurrentHeadDirection());
         SnakeSequenceFactory.getReferenceToBodyController().CurrentDirection = headController.CurrentDirection;
         body.AddLast (SnakeSequenceFactory.createBodyController(headController.CurrentPosition - headController.getMovement()));
         wasGrowing = true;
@@ -85,7 +85,7 @@ public class SnakeController : MonoBehaviour
             }
             else
             {
-                bodyController.setSpriteAccordingToPlane();
+				bodyController.setSpriteAccordingToPlane(this.getCurrentHeadDirection());
             }
  
             if (!wasGrowing)

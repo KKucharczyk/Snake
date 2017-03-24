@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-class SnakeSequenceFactory : MonoBehaviour
+public class SnakeSequenceFactory : MonoBehaviour
 {
     public static GameObject headPrefab = (GameObject) Resources.Load("HeadPrefab");
     public static GameObject bodyPrefab = (GameObject) Resources.Load("BodyPrefab");
@@ -32,6 +32,11 @@ class SnakeSequenceFactory : MonoBehaviour
     public static TailController getReferenceToTailController()
     {
         return tailPrefab.GetComponent<TailController>();
+    }
+
+    public static SpriteRenderer getReferenceToBodySpriteRenderer()
+    {
+        return bodyPrefab.GetComponent<SpriteRenderer>();
     }
 
     public static SpriteRenderer getReferenceToTailSpriteRenderer()
