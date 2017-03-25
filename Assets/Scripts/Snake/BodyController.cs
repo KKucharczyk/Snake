@@ -17,26 +17,22 @@ public class BodyController : AbstractBodyController, IBodyController
         {
             setBodySprite(BodySprite.VERTICAL.toInt());
         }
+		else
+			throw new InvalidDirectionException ();
     }
 
     public void setSpriteAccordingToTurn(Direction currentHeadDirection, Direction previousHeadDirection)
     {
-        if (isNorth_WestTurn(currentHeadDirection, previousHeadDirection))
-        {
-            setBodySprite(BodySprite.NORTH_WEST.toInt());
-        }
-        if (isNorth_EastTurn(currentHeadDirection, previousHeadDirection))
-        {
-            setBodySprite(BodySprite.NORTH_EAST.toInt());
-        }
-        if (isSouth_WestTurn(currentHeadDirection, previousHeadDirection))
-        {
-            setBodySprite(BodySprite.SOUTH_WEST.toInt());
-        }
-        if (isSouth_EastTurn(currentHeadDirection, previousHeadDirection))
-        {
-            setBodySprite(BodySprite.SOUTH_EAST.toInt());
-        }
+		if (isNorth_WestTurn (currentHeadDirection, previousHeadDirection)) {
+			setBodySprite (BodySprite.NORTH_WEST.toInt ());
+		} else if (isNorth_EastTurn (currentHeadDirection, previousHeadDirection)) {
+			setBodySprite (BodySprite.NORTH_EAST.toInt ());
+		} else if (isSouth_WestTurn (currentHeadDirection, previousHeadDirection)) {
+			setBodySprite (BodySprite.SOUTH_WEST.toInt ());
+		} else if (isSouth_EastTurn (currentHeadDirection, previousHeadDirection)) {
+			setBodySprite (BodySprite.SOUTH_EAST.toInt ());
+		} else
+			throw new InvalidDirectionException ();
     }
 
     /// <summary>

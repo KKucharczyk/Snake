@@ -1,14 +1,15 @@
 ﻿using UnityEngine;
 using NUnit.Framework;
 
+[TestFixture()]
 public class BodyControllerTest : MonoBehaviour
 {
     private IBodyController bodyController;
     private BodyController bodyControllerCheck;
 	private GameObject bodyPrefab = SnakeSequenceFactory.createBodyController(new Vector2(0.0f, 0.0f));
 
-    [Test]
-    public void shouldInitializeBodyDirection()
+	[Test()]
+	public void shouldInitializeBodyDirection()
     {
         // given
 		bodyController = bodyPrefab.GetComponent<BodyController>();
@@ -58,6 +59,19 @@ public class BodyControllerTest : MonoBehaviour
 		Assert.That(resultSprite.Equals(objectToCompare));
 	}
 
+	[Test]
+	[ExpectedException(typeof(InvalidDirectionException), ExpectedMessage = "There is an undefined direction.")]
+	public void shouldSetSpriteAccordingToPlane_invalid()
+	{
+		// given
+		bodyPrefab.GetComponent<BodyController> ().CurrentDirection = Direction.UNDEFINED;
+		bodyController = bodyPrefab.GetComponent<BodyController>();
+		bodyControllerCheck = (BodyController)bodyController;
+
+		// when
+		bodyController.setSpriteAccordingToPlane(bodyControllerCheck.CurrentDirection);
+	}
+
     [Test]
     public void shouldSetSpriteAccordingToTurn()
     {
@@ -75,4 +89,19 @@ public class BodyControllerTest : MonoBehaviour
 		// then
 		Assert.That(resultSprite.Equals(objectToCompare));
     }
+
+	[Test]
+	[ExpectedException(typeof(InvalidDirectionException), ExpectedMessage = "There is an undefined direction.")]
+	public void shouldSetSpriteAccordingToTurn_invalid()
+	{
+		// given
+		bodyPrefab.GetComponent<BodyController> ().CurrentDirection = Direction.UP;
+		bodyPrefab.GetComponent<BodyController> ().PreviousDirection = Direction.UNDEFINED;
+		bodyController = bodyPrefab.GetComponent<BodyController>();
+		bodyControllerCheck = (BodyController)bodyController;
+
+		// when
+		bodyController.setSpriteAccordingToTurn(bodyControllerCheck.CurrentDirection, bodyControllerCheck.PreviousDirection	);
+		Sprite resultSprite = SnakeSequenceFactory.getReferenceToBodySpriteRenderer().sprite;
+	}
 }
