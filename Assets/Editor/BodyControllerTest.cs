@@ -7,18 +7,12 @@ public class BodyControllerTest : MonoBehaviour
     private BodyController bodyControllerCheck;
 	private GameObject bodyPrefab = SnakeSequenceFactory.createBodyController(new Vector2(0.0f, 0.0f));
 
-    [SetUp]
-    public void SetUp()
-    {
-		bodyPrefab.GetComponent<BodyController> ().CurrentDirection = Direction.LEFT;
-		bodyController = bodyPrefab.GetComponent<BodyController>();
-        bodyControllerCheck = (BodyController)bodyController;
-    }
-
     [Test]
     public void shouldInitializeBodyDirection()
     {
         // given
+		bodyController = bodyPrefab.GetComponent<BodyController>();
+		bodyControllerCheck = (BodyController)bodyController;
         Direction direction = Direction.RIGHT;
 
         // when
@@ -32,6 +26,9 @@ public class BodyControllerTest : MonoBehaviour
     public void shouldSetSpriteAccordingToPlane_Vertical()
     {
         // given
+		bodyPrefab.GetComponent<BodyController> ().CurrentDirection = Direction.UP;
+		bodyController = bodyPrefab.GetComponent<BodyController>();
+		bodyControllerCheck = (BodyController)bodyController;
 		Sprite objectToCompare = bodyControllerCheck.getSprite(1);
 		bodyControllerCheck.CurrentDirection = Direction.UP;
 
@@ -39,7 +36,7 @@ public class BodyControllerTest : MonoBehaviour
 		bodyController.setSpriteAccordingToPlane(bodyControllerCheck.CurrentDirection);
         Sprite resultSprite = SnakeSequenceFactory.getReferenceToBodySpriteRenderer().sprite;
 
-        // requires better sprite handling
+        // then
 		Assert.That(resultSprite.Equals(objectToCompare));
 
     }
@@ -48,19 +45,34 @@ public class BodyControllerTest : MonoBehaviour
 	public void shouldSetSpriteAccordingToPlane_Horizontal()
 	{
 		// given
+		bodyPrefab.GetComponent<BodyController> ().CurrentDirection = Direction.LEFT;
+		bodyController = bodyPrefab.GetComponent<BodyController>();
+		bodyControllerCheck = (BodyController)bodyController;
 		Sprite objectToCompare = bodyControllerCheck.getSprite(0);
 
 		// when
 		bodyController.setSpriteAccordingToPlane(bodyControllerCheck.CurrentDirection);
 		Sprite resultSprite = SnakeSequenceFactory.getReferenceToBodySpriteRenderer().sprite;
 
-		// requires better sprite handling
+		// then
 		Assert.That(resultSprite.Equals(objectToCompare));
 	}
 
     [Test]
     public void shouldSetSpriteAccordingToTurn()
     {
-        // requires better sprite handling
+		// given
+		bodyPrefab.GetComponent<BodyController> ().CurrentDirection = Direction.UP;
+		bodyPrefab.GetComponent<BodyController> ().PreviousDirection = Direction.LEFT;
+		bodyController = bodyPrefab.GetComponent<BodyController>();
+		bodyControllerCheck = (BodyController)bodyController;
+		Sprite objectToCompare = bodyControllerCheck.getSprite(4);
+
+		// when
+		bodyController.setSpriteAccordingToTurn(bodyControllerCheck.CurrentDirection, bodyControllerCheck.PreviousDirection	);
+		Sprite resultSprite = SnakeSequenceFactory.getReferenceToBodySpriteRenderer().sprite;
+
+		// then
+		Assert.That(resultSprite.Equals(objectToCompare));
     }
 }
