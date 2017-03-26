@@ -1,61 +1,50 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using NUnit.Framework;
 
-public class HeadControllerTest : MonoBehaviour{
+[TestFixture ()]
+public class HeadControllerTest : MonoBehaviour
+{
+	private IHeadController headController;
+	private HeadController headControllerCheck;
 
-	private HeadController headController;
-
-	[SetUp] 
-	public void SetUp() {
-		headController = new HeadController();
+	[Test ()]
+	public void shouldMove ()
+	{
+        // TO DO: 
+        // install NSubstitute into project, then all tests become trivial.
 	}
 
-	[Test]
-	public void shouldSetMovmentAccordingToDirection_right() {
+	[Test ()]
+	public void shouldCheckIfHeadDirectionHasChanged ()
+	{
 		// given
-		Direction direction = Direction.RIGHT;
+		headController = new HeadController ();
+		headControllerCheck = (HeadController)headController;
+		headControllerCheck.CurrentDirection = Direction.UP;
+		headControllerCheck.CurrentDirection = Direction.LEFT;
 
 		// when
-		headController.setMovement(direction);
+		bool result = headController.isDirectionChanged ();
 
 		// then
-		Assert.AreEqual(headController.getMovement(), new Vector2 (1.0f, 0.0f));
+		Assert.True (result);
 	}
 
-	[Test]
-	public void shouldSetMovmentAccordingToDirection_left() {
+	[Test ()]
+	public void shouldCheckIfHeadDirectionHasChanged_invalid ()
+	{
 		// given
-		Direction direction = Direction.LEFT;
+		headController = new HeadController ();
+		headControllerCheck = (HeadController)headController;
+		headControllerCheck.CurrentDirection = Direction.RIGHT;
+		headControllerCheck.PreviousDirection = Direction.RIGHT;
 
 		// when
-		headController.setMovement(direction);
+		bool result = headController.isDirectionChanged ();
 
 		// then
-		Assert.AreEqual(headController.getMovement(), new Vector2 (-1.0f, 0.0f));
-	}
-
-	[Test]
-	public void shouldSetMovmentAccordingToDirection_up() {
-		// given
-		Direction direction = Direction.UP;
-
-		// when
-		headController.setMovement(direction);
-
-		// then
-		Assert.AreEqual(headController.getMovement(), new Vector2 (0.0f, 1.0f));
-	}
-
-	[Test]
-	public void shouldSetMovmentAccordingToDirection_down() {
-		// given
-		Direction direction = Direction.DOWN;
-
-		// when
-		headController.setMovement(direction);
-
-		// then
-		Assert.AreEqual(headController.getMovement(), new Vector2 (0.0f, -1.0f));
+		Assert.False (result);
 	}
 }
+
+
