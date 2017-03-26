@@ -49,10 +49,6 @@ public abstract class AbstractBodyController : MonoBehaviour {
     public Sprite[] sprites;
     protected SpriteRenderer spriteRenderer;
 
-    protected readonly Vector2 movmentUp = new Vector2(0.0f, 1.0f);
-    protected readonly Vector2 movmentDown = new Vector2(0.0f, -1.0f);
-    protected readonly Vector2 movmentLeft = new Vector2(-1.0f, 0.0f);
-    protected readonly Vector2 movmentRight = new Vector2(1.0f, 0.0f);
 
     public Sprite getSprite(int index)
     {
